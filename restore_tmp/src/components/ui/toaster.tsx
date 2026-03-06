@@ -1,0 +1,23 @@
+import { useToast } from "@/hooks/use-toast";
+import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "@/components/ui/toast";
+
+export function Toaster() {
+  const { toasts, dismiss } = useToast();
+
+  return (
+    <ToastProvider>
+      {toasts.map(function ({ id, title, description, action, ...props }) {
+        return (
+          <Toast key={id} onClick={() => dismiss(id)} className="cursor-pointer" {...props}>
+            <div className="flex items-center justify-center gap-2 w-full text-center">
+              {title && <ToastTitle>{title}</ToastTitle>}
+              {description && <ToastDescription className="opacity-100 font-medium">{description}</ToastDescription>}
+            </div>
+            {action}
+          </Toast>
+        );
+      })}
+      <ToastViewport />
+    </ToastProvider>
+  );
+}

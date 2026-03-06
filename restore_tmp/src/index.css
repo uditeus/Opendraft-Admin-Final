@@ -1,0 +1,316 @@
+@import url("https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Light mode (mirrors ChatGPT light) */
+    /* Slight off-white so cards (pure white) read with more contrast */
+    /* Slightly darker so white surfaces (cards/composer) read more clearly */
+    --background: 0 0% 99.6%;
+    /* Slightly darker ink for better readability */
+    --foreground: 222.2 15% 10%;
+
+    --card: 0 0% 99.6%;
+    --card-foreground: 222.2 15% 10%;
+
+    --popover: 0 0% 99.6%;
+    --popover-foreground: 222.2 15% 10%;
+
+    /* Primary = neutral ink/button like ChatGPT */
+    --primary: 222.2 15% 18%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 17% 96%;
+    --secondary-foreground: 222.2 15% 18%;
+
+    --muted: 210 17% 96%;
+    /* Darker muted text to improve contrast (WCAG-ish) */
+    --muted-foreground: 215 12% 38%;
+
+    --accent: 210 17% 96%;
+    --accent-foreground: 222.2 15% 18%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Stronger separators/inputs/ring for visibility */
+    --border: 214 16% 86%;
+    --input: 214 16% 86%;
+    --ring: 217 16% 48%;
+
+    --radius: 0.5rem;
+
+    /* Global elevation shadows (used by shadow-elev-1 / shadow-elev-2) */
+    --shadow-color: 222.2 15% 10%;
+    --shadow-elev-1a: 0.08;
+    --shadow-elev-1b: 0.16;
+    --shadow-elev-2a: 0.14;
+    --shadow-elev-2b: 0.34;
+
+    /* Chat-specific tokens */
+    /* Keep workspace background unified (chat + canvas) */
+    --chat-sidebar: 210 20% 97.2%;
+    --chat-sidebar-foreground: 222.2 15% 10%;
+    --chat-rail: 210 20% 97.2%;
+    --chat-rail-foreground: 222.2 15% 10%;
+    /* Slightly darker interaction states so they read on bright screens */
+    --chat-hover: 210 16% 92.5%;
+    --chat-active: 210 16% 90.5%;
+    /* Match document cards in light mode */
+    --chat-composer: 0 0% 99.6%;
+    --chat-code: 210 15% 96%;
+    --chat-code-foreground: 222.2 15% 10%;
+
+    /* Hero composer send button (reference-style) */
+    --chat-send-bg: 0 0% 0%;
+    --chat-send-fg: 0 0% 100%;
+
+    /* Tooltip (Chat pattern) */
+    --chat-tooltip-bg: 222.2 15% 10%;
+    --chat-tooltip-fg: 0 0% 100%;
+    --chat-tooltip-key-bg: 222.2 10% 18%;
+    --chat-tooltip-key-fg: 0 0% 100%;
+
+    /* Chat icon halo (hover/open) */
+    --chat-icon-halo: 222.2 15% 10%;
+    --chat-icon-halo-opacity: 0.08;
+    --chat-icon-halo-size: 36px;
+
+    /* Brand */
+    --opendraft-brand: 215 22% 30%;
+
+    /* Hero */
+    --hero-headline: 0 0% 100%;
+    --hero-gradient-from: 215 70% 70%;
+    --hero-gradient-to: 222 60% 32%;
+    --hero-solid-bg: 0 0% 100%;
+
+    --sidebar-background: 0 0% 96.9%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 0 0% 90.6%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark mode (dark-first: mirrors ChatGPT dark) */
+    --background: 210 7% 10%;
+    --foreground: 210 14% 92%;
+
+    --card: 210 7% 14%;
+    --card-foreground: 210 14% 92%;
+
+    --popover: 210 7% 14%;
+    --popover-foreground: 210 14% 92%;
+
+    --primary: 210 14% 92%;
+    --primary-foreground: 210 7% 12%;
+
+    --secondary: 210 6% 18%;
+    --secondary-foreground: 210 14% 92%;
+
+    --muted: 210 6% 16%;
+    --muted-foreground: 215 10% 66%;
+
+    --accent: 210 6% 18%;
+    --accent-foreground: 210 14% 92%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 210 6% 22%;
+    --input: 210 6% 22%;
+    --ring: 210 10% 65%;
+
+    /* Global elevation shadows (slightly stronger in dark) */
+    --shadow-color: 0 0% 0%;
+    --shadow-elev-1a: 0.18;
+    --shadow-elev-1b: 0.28;
+    --shadow-elev-2a: 0.26;
+    --shadow-elev-2b: 0.55;
+
+    --chat-sidebar: 210 7% 9%;
+    --chat-sidebar-foreground: 210 14% 92%;
+    --chat-rail: 210 7% 9%;
+    --chat-rail-foreground: 210 14% 92%;
+    --chat-hover: 210 6% 16%;
+    --chat-active: 210 6% 18%;
+    --chat-composer: 210 6% 16%;
+    --chat-code: 210 7% 13%;
+    --chat-code-foreground: 210 14% 92%;
+
+    /* Hero composer send button (reference-style) */
+    --chat-send-bg: 0 0% 100%;
+    --chat-send-fg: 210 7% 12%;
+
+    /* Tooltip (Chat pattern) */
+    --chat-tooltip-bg: 210 7% 6%;
+    --chat-tooltip-fg: 210 14% 92%;
+    --chat-tooltip-key-bg: 210 6% 14%;
+    --chat-tooltip-key-fg: 210 14% 92%;
+
+    /* Chat icon halo (hover/open) */
+    --chat-icon-halo: 0 0% 100%;
+    --chat-icon-halo-opacity: 0.08;
+    --chat-icon-halo-size: 36px;
+
+    /* Brand */
+    --opendraft-brand: 0 0% 100%;
+
+    /* Hero in dark mode */
+    --hero-headline: 0 0% 0%;
+    --hero-gradient-from: 215 55% 35%;
+    --hero-gradient-to: 222 80% 16%;
+    --hero-solid-bg: 0 0% 0%;
+    /* Sidebar: dark gray very close to black */
+    --sidebar-background: 210 6% 8%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Inter", theme("fontFamily.sans");
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    user-select: none;
+  }
+
+  /* Re-enable selection for text areas where it's necessary */
+  .rich-document-content,
+  .chat-message-content,
+  textarea,
+  input,
+  [data-selection-area="chat"],
+  [data-selection-area="document"] {
+    user-select: text;
+  }
+
+  ::selection {
+    background-color: rgba(59, 130, 246, 0.4) !important;
+  }
+}
+
+@layer utilities {
+  .font-averia {
+    font-family: "Averia Serif Libre", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  }
+
+  .chat-container {
+    @apply mx-auto w-full max-w-[800px] px-4;
+  }
+
+  .chat-scroll {
+    scrollbar-gutter: stable;
+    overscroll-behavior: contain;
+  }
+
+  /* Subtle, ChatGPT-like scrollbars */
+  .chat-scroll::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .chat-scroll::-webkit-scrollbar-thumb {
+    background: hsl(var(--border) / 0.6);
+    border: 2px solid transparent;
+    background-clip: content-box;
+    border-radius: 999px;
+  }
+
+  .chat-scroll::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--border) / 0.9);
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  .chat-focus {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* Circular halo behind chat icon buttons (matches reference print) */
+  .chat-icon-halo {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .chat-icon-halo::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--chat-icon-halo-size);
+    height: var(--chat-icon-halo-size);
+    transform: translate(-50%, -50%) scale(0.86);
+    border-radius: 999px;
+    background: hsl(var(--chat-icon-halo) / var(--chat-icon-halo-opacity));
+    opacity: 0;
+    transition: transform 140ms ease-out, opacity 140ms ease-out;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .chat-icon-halo:hover::before,
+  .chat-icon-halo:active::before,
+  .chat-icon-halo:focus-visible::before,
+  .chat-icon-halo[data-state="open"]::before {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+}
+
+@keyframes cloud-drift {
+  from {
+    transform: translateX(-20vw);
+  }
+
+  to {
+    transform: translateX(120vw);
+  }
+}
+
+.animate-cloud-drift {
+  animation: cloud-drift linear infinite;
+}

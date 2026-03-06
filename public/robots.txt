@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /library
+Disallow: /biblioteca
+Disallow: /chat
+Disallow: /projects
+Disallow: /new
+Disallow: /apps/*
+Disallow: /settings
+
+Sitemap: https://opendraft.co/sitemap.xml
