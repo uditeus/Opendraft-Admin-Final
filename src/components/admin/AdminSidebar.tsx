@@ -42,7 +42,7 @@ export function AdminSidebar({
     const location = useLocation();
     const { hasRole } = useRole();
 
-    const { theme, setTheme } = useTheme();
+    const { theme, setTheme, resolvedTheme } = useTheme();
 
     const isItemActive = (item: AdminNavItem) => {
         // Precise active state for grouped items
@@ -133,9 +133,9 @@ export function AdminSidebar({
                         <button
                             type="button"
                             className="chat-focus grid h-10 w-10 place-items-center rounded-xl bg-transparent text-sidebar-foreground/60 hover:text-sidebar-foreground transition-all duration-200 opacity-0 group-hover:opacity-100"
-                            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
                         >
-                            <AppIcon name={theme === "dark" ? "Sun" : "Moon"} className={MINI_ICON_CLASS} />
+                            <AppIcon name={resolvedTheme === "dark" ? "Sun" : "Moon"} className={MINI_ICON_CLASS} />
                         </button>
                     </ChatTooltip>
                 </div>

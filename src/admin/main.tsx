@@ -14,10 +14,10 @@ createRoot(document.getElementById("root")!).render(
         <QueryClientProvider client={queryClient}>
             <ThemeProvider
                 attribute="class"
-                defaultTheme="dark"
-                enableSystem={false}
+                defaultTheme="system"
+                enableSystem={true}
                 disableTransitionOnChange
-                storageKey="admin-theme"
+                storageKey="lovable-chat-theme"
             >
                 <AuthProvider>
                     <AdminApp />
