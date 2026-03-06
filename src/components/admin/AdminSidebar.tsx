@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useRole } from "@/hooks/useRole";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useTheme } from "next-themes";
 
 export const ADMIN_SIDEBAR_WIDTH_PX = 300;
 export const ADMIN_SIDEBAR_COLLAPSED_WIDTH_PX = 52;
@@ -40,6 +41,8 @@ export function AdminSidebar({
     const navigate = useNavigate();
     const location = useLocation();
     const { hasRole } = useRole();
+
+    const { theme, setTheme } = useTheme();
 
     const isItemActive = (item: AdminNavItem) => {
         // Precise active state for grouped items
@@ -124,19 +127,17 @@ export function AdminSidebar({
             <div className="pt-2 pb-1 px-3">
                 <div className="flex items-center justify-between gap-2">
                     <div className="flex min-w-0 flex-1 items-center px-3 py-2 text-sidebar-foreground">
-                        <span className="truncate text-lg font-semibold tracking-tight">Console Opendraft</span>
+                        <span className="truncate text-lg font-semibold tracking-tight">Opendraft Console</span>
                     </div>
-                    {onToggleCollapsed && (
-                        <ChatTooltip label="Encolher barra lateral">
-                            <button
-                                type="button"
-                                className="chat-focus grid h-10 w-10 place-items-center rounded-xl bg-transparent text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors"
-                                onClick={onToggleCollapsed}
-                            >
-                                <AppIcon name="LayoutLeftIcon" className={MINI_ICON_CLASS} />
-                            </button>
-                        </ChatTooltip>
-                    )}
+                    <ChatTooltip label="Trocar tema">
+                        <button
+                            type="button"
+                            className="chat-focus grid h-10 w-10 place-items-center rounded-xl bg-transparent text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors"
+                            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                        >
+                            <AppIcon name={theme === "dark" ? "Sun" : "Moon"} className={MINI_ICON_CLASS} />
+                        </button>
+                    </ChatTooltip>
                 </div>
             </div>
 
