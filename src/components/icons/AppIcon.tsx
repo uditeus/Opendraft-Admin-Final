@@ -107,7 +107,10 @@ import {
   NewTwitterIcon,
   Sun01Icon,
   Moon02Icon,
+  Home01Icon,
+  Activity01Icon,
 } from "@hugeicons/core-free-icons";
+
 
 import { cn } from "@/lib/utils";
 
@@ -120,6 +123,12 @@ const ICON_MAP = {
   Share04Icon: Share01Icon,
   Building02Icon: Building02Icon,
   UserIcon: UserIcon,
+
+  // Admin New Icons
+  HomeAdmin: Home01Icon,
+  UsageAdmin: Activity01Icon,
+  TerminalAdmin: Bug02Icon,
+  ServerAdmin: Settings01Icon,
 
   // navigation / common
   Plus: Add01Icon,

@@ -22,13 +22,13 @@ type AdminNavItem = {
 };
 
 const adminItems: AdminNavItem[] = [
-    { id: "overview", label: "Overview", path: "/admin", Icon: createAppIcon("PencilEdit02Icon") },
+    { id: "overview", label: "Overview", path: "/admin", Icon: createAppIcon("HomeAdmin") },
     { id: "users", label: "Users", path: "/admin/users", Icon: createAppIcon("User") },
     { id: "revenue", label: "Revenue", path: "/admin/financials", Icon: createAppIcon("CreditCard"), requiresRole: "owner" },
     { id: "analytics", label: "Analytics", path: "/admin/growth", Icon: createAppIcon("ChartBarIcon") },
-    { id: "ai", label: "AI", path: "/admin/api-usage", Icon: createAppIcon("Zap") },
-    { id: "developer", label: "Developer", path: "/admin/settings", Icon: createAppIcon("DatabaseIcon"), requiresRole: "dev" },
-    { id: "system", label: "System", path: "/admin/logs", Icon: createAppIcon("Settings") },
+    { id: "ai", label: "Usage", path: "/admin/api-usage", Icon: createAppIcon("UsageAdmin") },
+    { id: "developer", label: "Developer", path: "/admin/settings", Icon: createAppIcon("TerminalAdmin"), requiresRole: "dev" },
+    { id: "system", label: "System", path: "/admin/logs", Icon: createAppIcon("ServerAdmin") },
 ];
 
 export function AdminSidebar({
