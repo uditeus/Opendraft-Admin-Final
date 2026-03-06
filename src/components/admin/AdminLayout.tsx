@@ -29,7 +29,7 @@ export function AdminLayout() {
     }, [sidebarCollapsed]);
 
     return (
-        <div className="h-screen w-full bg-[#FCFCFC] dark:bg-[#0f1011] text-foreground transition-colors duration-500 overflow-hidden">
+        <div className="h-screen w-full bg-background text-foreground transition-colors duration-500 overflow-hidden">
             <AdminCommandPalette />
 
             {/* Mobile Overlay */}

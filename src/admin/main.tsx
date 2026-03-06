@@ -15,7 +15,7 @@ createRoot(document.getElementById("root")!).render(
             <ThemeProvider
                 attribute="class"
                 defaultTheme="dark"
-                enableSystem={true}
+                enableSystem={false}
                 disableTransitionOnChange
                 storageKey="lovable-chat-theme"
             >

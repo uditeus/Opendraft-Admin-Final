@@ -15,11 +15,15 @@
             try {
                 var theme = localStorage.getItem('lovable-chat-theme');
                 var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
-                if (!theme && supportDarkMode) theme = 'dark';
-                if (theme === 'dark' || (!theme && supportDarkMode)) {
+
+                // Se o tema for 'dark' OU se não houver tema salvo (primeiro acesso)
+                // Vamos forçar o dark como padrão inicial do Console como solicitado
+                if (theme === 'dark' || !theme || (theme === 'system' && supportDarkMode)) {
                     document.documentElement.classList.add('dark');
+                    document.documentElement.style.colorScheme = 'dark';
                 } else {
                     document.documentElement.classList.remove('dark');
+                    document.documentElement.style.colorScheme = 'light';
                 }
             } catch (e) { }
         })();
