@@ -14,7 +14,17 @@ export function ThemePicker() {
                 className={cn(
                     "group relative cursor-pointer",
                 )}
-                onClick={() => setTheme("light")}
+                onClick={async () => {
+                    setTheme("light");
+                    try {
+                        const { getSupabase } = await import("@/lib/supabase/client");
+                        await getSupabase().auth.updateUser({
+                            data: { theme: "light" }
+                        });
+                    } catch (e) {
+                        console.error("Failed to sync theme to DB", e);
+                    }
+                }}
                 title={tt("Claro", "Light")}
             >
                 <div
@@ -44,7 +54,17 @@ export function ThemePicker() {
                 className={cn(
                     "group relative cursor-pointer",
                 )}
-                onClick={() => setTheme("dark")}
+                onClick={async () => {
+                    setTheme("dark");
+                    try {
+                        const { getSupabase } = await import("@/lib/supabase/client");
+                        await getSupabase().auth.updateUser({
+                            data: { theme: "dark" }
+                        });
+                    } catch (e) {
+                        console.error("Failed to sync theme to DB", e);
+                    }
+                }}
                 title={tt("Escuro", "Dark")}
             >
                 <div
@@ -74,7 +94,17 @@ export function ThemePicker() {
                 className={cn(
                     "group relative cursor-pointer",
                 )}
-                onClick={() => setTheme("system")}
+                onClick={async () => {
+                    setTheme("system");
+                    try {
+                        const { getSupabase } = await import("@/lib/supabase/client");
+                        await getSupabase().auth.updateUser({
+                            data: { theme: "system" }
+                        });
+                    } catch (e) {
+                        console.error("Failed to sync theme to DB", e);
+                    }
+                }}
                 title={tt("Sistema", "System")}
             >
                 <div

@@ -133,7 +133,19 @@ export function AdminSidebar({
                         <button
                             type="button"
                             className="chat-focus grid h-10 w-10 place-items-center rounded-xl bg-transparent text-sidebar-foreground/60 hover:text-sidebar-foreground transition-all duration-200 opacity-0 group-hover:opacity-100"
-                            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+                            onClick={async () => {
+                                const newTheme = resolvedTheme === "dark" ? "light" : "dark";
+                                setTheme(newTheme);
+
+                                try {
+                                    const { getSupabase } = await import("@/lib/supabase/client");
+                                    await getSupabase().auth.updateUser({
+                                        data: { theme: newTheme }
+                                    });
+                                } catch (e) {
+                                    console.error("Failed to sync theme to DB", e);
+                                }
+                            }}
                         >
                             <AppIcon name={resolvedTheme === "dark" ? "Sun" : "Moon"} className={MINI_ICON_CLASS} />
                         </button>
