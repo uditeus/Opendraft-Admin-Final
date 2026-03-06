@@ -42,154 +42,163 @@ const LIMITS = {
     "Max X": { tokensDay: 0, reqMin: 0, tokensReq: 0 },
 };
 
-import { AdminSubNav } from "@/components/admin/AdminSubNav";
-
 export default function AdminApiUsage() {
     return (
-        <div className="flex flex-col gap-6">
-            <div>
-                <h1 className="text-[26px] font-serif font-semibold text-foreground tracking-tight">AI & Usage</h1>
-                <p className="text-[13.5px] text-muted-foreground mt-0.5">Custo e consumo de IA da plataforma</p>
+        <div className="flex flex-col gap-10 max-w-5xl mx-auto pb-20">
+            <div className="mt-10">
+                <h1 className="text-3xl font-serif font-semibold text-foreground tracking-tight">API Usage</h1>
+                <p className="text-sm text-muted-foreground mt-1">Custo, consumo de modelos e limites da plataforma</p>
             </div>
 
-            <AdminSubNav
-                items={[
-                    { label: "Usage", path: "/admin/api-usage" },
-                    { label: "Costs", path: "/admin/api-usage/costs" },
-                    { label: "Models", path: "/admin/api-usage/models" },
-                    { label: "Limits", path: "/admin/api-usage/limits" },
-                ]}
-            />
-
             {/* KPIs */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="flex flex-wrap items-center justify-between gap-6 px-1 border-b border-border/30 pb-8">
                 {[
-                    { label: "TOKENS HOJE", value: "142.8K", sub: "↑+12% vs ontem" },
-                    { label: "TOKENS 7 DIAS", value: "1.02M", sub: "↑+8% vs semana anterior" },
-                    { label: "TOKENS MÊS", value: "3.84M", sub: null },
-                    { label: "CUSTO HOJE", value: "R$ 47", sub: null },
-                    { label: "CUSTO MÊS", value: "R$ 1.940", sub: null },
-                    { label: "CUSTO MÉDIO/USUÁRIO", value: "R$ 1,55", sub: null },
-                    { label: "MARGEM MÉDIA/USUÁRIO", value: "R$ 47,45", sub: null },
-                ].map((kpi) => (
-                    <div key={kpi.label} className="rounded-xl border border-border/50 bg-card shadow-sm p-5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60">{kpi.label}</span>
-                        <p className="mt-2 text-2xl font-semibold text-foreground tracking-tight">{kpi.value}</p>
-                        {kpi.sub && <span className="text-[11px] font-medium text-emerald-500 mt-1 block">{kpi.sub}</span>}
+                    { label: "Tokens Hoje", value: "142.8K", highlight: true },
+                    { label: "Tokens 30D", value: "3.84M" },
+                    { label: "Custo Hoje", value: "R$ 47", highlight: true },
+                    { label: "Custo Mensal", value: "R$ 1.940" },
+                    { label: "Custo/Usuário", value: "R$ 1,55" },
+                ].map((kpi, i) => (
+                    <div key={i} className="flex flex-col">
+                        <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">{kpi.label}</span>
+                        <div className="mt-1 flex items-baseline gap-2">
+                            <span className={cn("text-3xl font-semibold tracking-tight", kpi.highlight ? "text-[#0066fe]" : "text-foreground")}>
+                                {kpi.value}
+                            </span>
+                        </div>
                     </div>
                 ))}
             </div>
 
             {/* Charts */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                <div className="rounded-xl border border-border/50 bg-card shadow-sm p-6">
-                    <h3 className="text-[14px] font-bold text-foreground mb-6">Tokens por dia (30 dias)</h3>
-                    <ResponsiveContainer width="100%" height={220}>
-                        <AreaChart data={TOKENS_30D}>
-                            <CartesianGrid strokeDasharray="0 0" stroke="hsl(var(--border))" strokeOpacity={0.4} vertical={false} />
-                            <XAxis dataKey="day" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} dy={10} />
-                            <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} dx={-10} tickFormatter={(v) => `${(v / 1000).toFixed(0)}K`} />
-                            <Tooltip contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 12, fontSize: 12, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} />
-                            <Area type="monotone" dataKey="tokens" stroke="#3E768D" fill="#3E768D" fillOpacity={0.06} strokeWidth={2.5} />
-                        </AreaChart>
-                    </ResponsiveContainer>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-xs font-semibold text-foreground uppercase tracking-widest">Tokens por dia (30d)</h3>
+                    </div>
+                    <div className="h-[260px] w-full bg-background rounded-2xl border border-border/50 p-4">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={TOKENS_30D}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" strokeOpacity={0.5} vertical={false} />
+                                <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} dy={10} />
+                                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} dx={-10} tickFormatter={(v) => `${(v / 1000).toFixed(0)}K`} />
+                                <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 12, fontSize: 12, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} />
+                                <Area type="monotone" dataKey="tokens" stroke="#0066fe" fill="#0066fe" fillOpacity={0.05} strokeWidth={2} />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
                 </div>
-                <div className="rounded-xl border border-border/50 bg-card shadow-sm p-6">
-                    <h3 className="text-[14px] font-bold text-foreground mb-6">Custo por dia (R$)</h3>
-                    <ResponsiveContainer width="100%" height={220}>
-                        <BarChart data={COST_30D}>
-                            <CartesianGrid strokeDasharray="0 0" stroke="hsl(var(--border))" strokeOpacity={0.4} vertical={false} />
-                            <XAxis dataKey="day" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} dy={10} />
-                            <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} dx={-10} />
-                            <Tooltip contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 12, fontSize: 12, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} />
-                            <Bar dataKey="cost" fill="#3E768D" fillOpacity={0.6} radius={[4, 4, 0, 0]} />
-                        </BarChart>
-                    </ResponsiveContainer>
+                <div>
+                    <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-xs font-semibold text-foreground uppercase tracking-widest">Custo por dia</h3>
+                    </div>
+                    <div className="h-[260px] w-full bg-background rounded-2xl border border-border/50 p-4">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={COST_30D}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" strokeOpacity={0.5} vertical={false} />
+                                <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} dy={10} />
+                                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} dx={-10} />
+                                <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 12, fontSize: 12, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} cursor={{ fill: "hsl(var(--muted)/0.3)" }} />
+                                <Bar dataKey="cost" fill="#0066fe" fillOpacity={0.8} radius={[4, 4, 0, 0]} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
                 </div>
             </div>
 
-            {/* Breakdown por modelo */}
-            <div className="rounded-xl border border-border/50 bg-card shadow-sm overflow-hidden">
-                <div className="px-6 py-4 border-b border-border/30 bg-muted/20">
-                    <h3 className="text-[14px] font-bold text-foreground">Breakdown por modelo</h3>
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="border-b border-border/30">
-                                {["MODELO", "REQUESTS", "TOKENS INPUT", "TOKENS OUTPUT", "TOTAL TOKENS", "CUSTO ESTIMADO"].map((h) => (
-                                    <th key={h} className="px-6 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">{h}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border/20">
-                            {MODEL_BREAKDOWN.map((m) => (
-                                <tr key={m.model} className="hover:bg-muted/10 transition-colors">
-                                    <td className="px-6 py-4 text-[13px] font-semibold text-foreground/90">{m.model}</td>
-                                    <td className="px-6 py-4 text-[13px] text-foreground/70">{m.requests.toLocaleString()}</td>
-                                    <td className="px-6 py-4 text-[13px] text-muted-foreground">{m.input}</td>
-                                    <td className="px-6 py-4 text-[13px] text-muted-foreground">{m.output}</td>
-                                    <td className="px-6 py-4 text-[13px] text-foreground/70 font-semibold">{m.total}</td>
-                                    <td className="px-6 py-4 text-[13px] text-foreground/90 font-bold">{m.cost}</td>
+            {/* Breakdown por modelo & Feature */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Breakdown por modelo */}
+                <div className="border border-border/30 rounded-3xl overflow-hidden bg-background">
+                    <div className="px-6 py-5 border-b border-border/30">
+                        <h3 className="text-sm font-semibold text-foreground">Consumo por Modelo</h3>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="border-b border-border/30 bg-muted/5">
+                                    {["MODELO", "TOTAL TOKENS", "CUSTO ESTIMADO"].map((h) => (
+                                        <th key={h} className="px-6 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">{h}</th>
+                                    ))}
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody className="divide-y divide-border/20">
+                                {MODEL_BREAKDOWN.map((m) => (
+                                    <tr key={m.model} className="hover:bg-muted/10 transition-colors">
+                                        <td className="px-6 py-4 text-sm font-semibold text-foreground">{m.model}</td>
+                                        <td className="px-6 py-4 text-sm text-muted-foreground">{m.total}</td>
+                                        <td className="px-6 py-4 text-sm text-[#0066fe] font-semibold">{m.cost}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Custo por feature */}
+                <div className="border border-border/30 rounded-3xl overflow-hidden bg-background">
+                    <div className="px-6 py-5 border-b border-border/30">
+                        <h3 className="text-sm font-semibold text-foreground">Custo por Feature</h3>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="border-b border-border/30 bg-muted/5">
+                                    {["FEATURE", "TOKENS", "CUSTO"].map((h) => (
+                                        <th key={h} className="px-6 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">{h}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-border/20">
+                                {COST_PER_FEATURE.map((f) => (
+                                    <tr key={f.feature} className="hover:bg-muted/10 transition-colors">
+                                        <td className="px-6 py-4 text-sm font-semibold text-foreground">{f.feature}</td>
+                                        <td className="px-6 py-4 text-sm text-muted-foreground">{f.tokens}</td>
+                                        <td className="px-6 py-4 text-sm text-[#0066fe] font-semibold">{f.cost}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             {/* Usuários que mais consomem */}
-            <div className="rounded-xl border border-border/50 bg-card shadow-sm overflow-hidden">
-                <div className="px-6 py-4 border-b border-border/30 bg-muted/20">
-                    <h3 className="text-[14px] font-bold text-foreground">Usuários que mais consomem</h3>
-                    <p className="text-[11px] text-muted-foreground/60 font-medium">Ordenado por maior custo</p>
+            <div className="border border-border/30 rounded-3xl overflow-hidden bg-background">
+                <div className="flex items-center justify-between px-6 py-5 border-b border-border/30">
+                    <div>
+                        <h3 className="text-sm font-semibold text-foreground">Top Consumidores</h3>
+                        <p className="text-xs text-muted-foreground mt-0.5">Ordenado por requisições e custo</p>
+                    </div>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-border/30">
-                                {["USUÁRIO", "PLANO", "REQUESTS", "TOKENS", "CUSTO ESTIMADO", "COPIES GERADAS"].map((h) => (
-                                    <th key={h} className="px-6 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">{h}</th>
+                            <tr className="border-b border-border/30 bg-muted/5">
+                                {["USUÁRIO", "PLANO", "REQUESTS", "TOKENS", "CUSTO ESTIMADO"].map((h) => (
+                                    <th key={h} className="px-6 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">{h}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/20">
                             {TOP_USERS.map((u) => (
                                 <tr key={u.user} className="hover:bg-muted/10 transition-colors">
-                                    <td className="px-6 py-4 text-[13px] font-semibold text-foreground/90">{u.user}</td>
-                                    <td className="px-6 py-4 text-[13px] text-foreground/70">{u.plan}</td>
-                                    <td className="px-6 py-4 text-[13px] text-muted-foreground font-medium">{u.requests.toLocaleString()}</td>
-                                    <td className="px-6 py-4 text-[13px] text-muted-foreground font-medium">{u.tokens}</td>
-                                    <td className="px-6 py-4 text-[13px] text-foreground/90 font-bold">{u.cost}</td>
-                                    <td className="px-6 py-4 text-[13px] text-muted-foreground font-medium">{u.copies}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {/* Custo por feature */}
-            <div className="rounded-xl border border-border/50 bg-card shadow-sm overflow-hidden">
-                <div className="px-6 py-4 border-b border-border/30 bg-muted/20">
-                    <h3 className="text-[14px] font-bold text-foreground">Custo por feature</h3>
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="border-b border-border/30">
-                                {["FEATURE", "TOKENS", "CUSTO", "REQUESTS"].map((h) => (
-                                    <th key={h} className="px-6 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">{h}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border/20">
-                            {COST_PER_FEATURE.map((f) => (
-                                <tr key={f.feature} className="hover:bg-muted/10 transition-colors">
-                                    <td className="px-6 py-4 text-[13px] font-semibold text-foreground/90">{f.feature}</td>
-                                    <td className="px-6 py-4 text-[13px] text-muted-foreground font-medium">{f.tokens}</td>
-                                    <td className="px-6 py-4 text-[13px] text-foreground/90 font-bold">{f.cost}</td>
-                                    <td className="px-6 py-4 text-[13px] text-muted-foreground font-medium">{f.requests.toLocaleString()}</td>
+                                    <td className="px-6 py-4 text-sm font-semibold text-foreground">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-muted/20 border border-border/30 flex items-center justify-center">
+                                                <AppIcon name="UserIcon" className="w-4 h-4 text-muted-foreground" />
+                                            </div>
+                                            {u.user}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className="px-2.5 py-1 text-xs font-semibold rounded-full border border-border bg-muted/20 text-foreground">
+                                            {u.plan}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-muted-foreground">{u.requests.toLocaleString()}</td>
+                                    <td className="px-6 py-4 text-sm text-muted-foreground">{u.tokens}</td>
+                                    <td className="px-6 py-4 text-sm text-[#0066fe] font-semibold">{u.cost}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -198,24 +207,24 @@ export default function AdminApiUsage() {
             </div>
 
             {/* Limites */}
-            <div className="rounded-xl border border-border/50 bg-card shadow-sm p-6 mb-4">
-                <h3 className="text-[14px] font-bold text-foreground mb-6">Limites por plano</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="border border-border/30 rounded-3xl overflow-hidden bg-background p-6">
+                <h3 className="text-xs font-semibold text-foreground uppercase tracking-widest mb-6">Limites por plano</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {Object.entries(LIMITS).map(([plan, limits]) => (
-                        <div key={plan} className="rounded-xl border border-border/40 p-5 bg-muted/10">
-                            <h4 className="text-[13px] font-bold text-foreground/80 mb-4">{plan}</h4>
+                        <div key={plan} className="rounded-2xl border border-border/30 p-5">
+                            <h4 className="text-sm font-semibold text-foreground mb-4">{plan}</h4>
                             <div className="space-y-3">
-                                <div className="flex justify-between text-[12px]">
-                                    <span className="text-muted-foreground font-medium">Tokens/dia</span>
-                                    <span className="text-foreground/90 font-bold">{limits.tokensDay === 0 ? "∞" : limits.tokensDay.toLocaleString()}</span>
+                                <div className="flex justify-between items-center pb-2 border-b border-border/20">
+                                    <span className="text-xs text-muted-foreground">Tokens/dia</span>
+                                    <span className="text-xs font-bold text-foreground">{limits.tokensDay === 0 ? "∞" : limits.tokensDay.toLocaleString()}</span>
                                 </div>
-                                <div className="flex justify-between text-[12px]">
-                                    <span className="text-muted-foreground font-medium">Req/min</span>
-                                    <span className="text-foreground/90 font-bold">{limits.reqMin === 0 ? "∞" : limits.reqMin}</span>
+                                <div className="flex justify-between items-center pb-2 border-b border-border/20">
+                                    <span className="text-xs text-muted-foreground">Req/min</span>
+                                    <span className="text-xs font-bold text-foreground">{limits.reqMin === 0 ? "∞" : limits.reqMin}</span>
                                 </div>
-                                <div className="flex justify-between text-[12px]">
-                                    <span className="text-muted-foreground font-medium">Tokens/req</span>
-                                    <span className="text-foreground/90 font-bold">{limits.tokensReq === 0 ? "∞" : limits.tokensReq.toLocaleString()}</span>
+                                <div className="flex justify-between items-center relative">
+                                    <span className="text-xs text-muted-foreground">Tokens/req</span>
+                                    <span className="text-xs font-bold text-foreground">{limits.tokensReq === 0 ? "∞" : limits.tokensReq.toLocaleString()}</span>
                                 </div>
                             </div>
                         </div>

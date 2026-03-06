@@ -4,15 +4,15 @@ import { AdminTable } from "@/components/admin/AdminTable";
 import { cn } from "@/lib/utils";
 
 const ACTION_COLORS: Record<string, string> = {
-    DAR_CREDITOS: "text-emerald-400 bg-emerald-500/10",
-    REMOVER_CREDITOS: "text-orange-400 bg-orange-500/10",
-    SUSPENDER: "text-amber-400 bg-amber-500/10",
-    REATIVAR: "text-emerald-400 bg-emerald-500/10",
-    BANIR: "text-red-400 bg-red-500/10",
-    ALTERAR_ROLE: "text-blue-400 bg-blue-500/10",
-    ALTERAR_PLANO: "text-purple-400 bg-purple-500/10",
-    RESET_SENHA: "text-muted-foreground bg-sidebar-accent/30",
-    LOGIN_ADMIN: "text-muted-foreground bg-sidebar-accent/20",
+    DAR_CREDITOS: "text-[#0066fe] bg-[#0066fe]/10 border-[#0066fe]/20",
+    REMOVER_CREDITOS: "text-amber-500 bg-amber-500/10 border-amber-500/20",
+    SUSPENDER: "text-amber-500 bg-amber-500/10 border-amber-500/20",
+    REATIVAR: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
+    BANIR: "text-red-500 bg-red-500/10 border-red-500/20",
+    ALTERAR_ROLE: "text-foreground bg-foreground/10 border-foreground/20",
+    ALTERAR_PLANO: "text-foreground bg-muted/40 border-border/50",
+    RESET_SENHA: "text-muted-foreground bg-muted/20 border-border/30",
+    LOGIN_ADMIN: "text-muted-foreground bg-muted/10 border-transparent",
 };
 
 const MOCK_LOGS = Array.from({ length: 48 }, (_, i) => ({
@@ -34,8 +34,6 @@ const MOCK_LOGS = Array.from({ length: 48 }, (_, i) => ({
     ip: `189.${40 + (i % 5)}.xxx.xxx`,
 }));
 
-import { AdminSubNav } from "@/components/admin/AdminSubNav";
-
 export default function AdminLogs() {
     const [search, setSearch] = React.useState("");
     const [page, setPage] = React.useState(1);
@@ -54,85 +52,82 @@ export default function AdminLogs() {
     const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
 
     return (
-        <div className="flex flex-col gap-6">
-            <div>
-                <h1 className="text-[26px] font-serif font-semibold text-foreground tracking-tight">Audit Logs</h1>
-                <p className="text-[13.5px] text-muted-foreground mt-0.5">Histórico completo de ações administrativas</p>
+        <div className="flex flex-col gap-8 max-w-6xl mx-auto pb-20">
+            <div className="mt-10">
+                <h1 className="text-3xl font-serif font-semibold text-foreground tracking-tight">Audit Logs</h1>
+                <p className="text-sm text-muted-foreground mt-1">Histórico completo de ações administrativas e de sistema</p>
             </div>
 
-            <AdminSubNav
-                items={[
-                    { label: "Activity Logs", path: "/admin/logs" },
-                    { label: "Technical Logs", path: "/admin/logs/technical" },
-                    { label: "Maintenance", path: "/admin/system/maintenance" },
-                ]}
-            />
-
-            <div className="flex items-center gap-3">
-                <div className="relative">
+            <div className="flex items-center gap-4 border-b border-border/30 pb-6">
+                <div className="relative w-full sm:w-auto min-w-[200px]">
                     <select
                         value={actionFilter}
                         onChange={(e) => { setActionFilter(e.target.value); setPage(1); }}
                         className={cn(
-                            "h-10 rounded-full border border-border/50 bg-card px-5 pr-10 shadow-sm appearance-none",
-                            "text-[13px] font-medium text-foreground/70 outline-none focus:border-border transition-all cursor-pointer",
+                            "h-10 w-full rounded-2xl border border-border/50 bg-transparent px-4 pr-10",
+                            "text-sm font-medium text-foreground outline-none focus:border-[#0066fe] focus:ring-1 focus:ring-[#0066fe] transition-all cursor-pointer appearance-none",
                         )}
                     >
                         <option value="all">Todas as ações</option>
                         {Object.keys(ACTION_COLORS).map((a) => (
-                            <option key={a} value={a}>{a}</option>
+                            <option key={a} value={a}>{a.replace(/_/g, " ")}</option>
                         ))}
                     </select>
-                    <AppIcon name="ChevronDown" className="absolute right-3.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground/40 pointer-events-none" />
+                    <AppIcon name="ChevronDown" className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                 </div>
             </div>
 
-            <AdminTable
-                columns={[
-                    {
-                        key: "timestamp", label: "Data/Hora", render: (r) => (
-                            <span className="text-[12px] text-muted-foreground font-mono">{r.timestamp}</span>
-                        )
-                    },
-                    {
-                        key: "admin", label: "Admin", render: (r) => (
-                            <span className="text-[12px] text-foreground/60">{r.admin}</span>
-                        )
-                    },
-                    {
-                        key: "action", label: "Ação", render: (r) => (
-                            <span className={cn("rounded-md px-2 py-0.5 text-[11px] font-semibold", ACTION_COLORS[r.action] || "text-muted-foreground")}>
-                                {r.action}
-                            </span>
-                        )
-                    },
-                    {
-                        key: "target", label: "Alvo", render: (r) => (
-                            <span className="text-[12px] text-foreground/60">{r.target}</span>
-                        )
-                    },
-                    {
-                        key: "detail", label: "Detalhes", render: (r) => (
-                            <span className="text-[12px] text-muted-foreground max-w-[300px] truncate block">{r.detail}</span>
-                        )
-                    },
-                    {
-                        key: "ip", label: "IP", render: (r) => (
-                            <span className="text-[11px] text-muted-foreground/60 font-mono">{r.ip}</span>
-                        )
-                    },
-                ]}
-                data={paginated}
-                keyExtractor={(r) => r.id}
-                page={page}
-                pageSize={pageSize}
-                total={filtered.length}
-                onPageChange={setPage}
-                searchValue={search}
-                onSearchChange={(v) => { setSearch(v); setPage(1); }}
-                searchPlaceholder="Buscar em logs..."
-                emptyMessage="Nenhum log encontrado"
-            />
+            <div className="border border-border/30 rounded-3xl overflow-hidden bg-background">
+                <AdminTable
+                    columns={[
+                        {
+                            key: "timestamp", label: "Data/Hora", render: (r) => (
+                                <span className="text-xs text-muted-foreground font-mono">{r.timestamp}</span>
+                            )
+                        },
+                        {
+                            key: "admin", label: "Admin", render: (r) => (
+                                <span className="text-sm font-semibold text-foreground">{r.admin}</span>
+                            )
+                        },
+                        {
+                            key: "action", label: "Ação", render: (r) => (
+                                <span className={cn(
+                                    "rounded-full px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider border",
+                                    ACTION_COLORS[r.action] || "text-muted-foreground bg-muted/10 border-border"
+                                )}>
+                                    {r.action.replace(/_/g, " ")}
+                                </span>
+                            )
+                        },
+                        {
+                            key: "target", label: "Alvo", render: (r) => (
+                                <span className="text-sm text-foreground/80">{r.target}</span>
+                            )
+                        },
+                        {
+                            key: "detail", label: "Detalhes", render: (r) => (
+                                <span className="text-sm text-muted-foreground max-w-[300px] truncate block">{r.detail}</span>
+                            )
+                        },
+                        {
+                            key: "ip", label: "IP", render: (r) => (
+                                <span className="text-xs text-muted-foreground/50 font-mono">{r.ip}</span>
+                            )
+                        },
+                    ]}
+                    data={paginated}
+                    keyExtractor={(r) => r.id}
+                    page={page}
+                    pageSize={pageSize}
+                    total={filtered.length}
+                    onPageChange={setPage}
+                    searchValue={search}
+                    onSearchChange={(v) => { setSearch(v); setPage(1); }}
+                    searchPlaceholder="Buscar por admin, alvo ou detalhe..."
+                    emptyMessage="Nenhum log encontrado"
+                />
+            </div>
         </div>
     );
 }
