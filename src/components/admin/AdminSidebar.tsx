@@ -124,7 +124,7 @@ export function AdminSidebar({
             <div className="pt-2 pb-1 px-3">
                 <div className="flex items-center justify-between gap-2">
                     <div className="flex min-w-0 flex-1 items-center px-3 py-2 text-sidebar-foreground">
-                        <span className="truncate text-lg font-semibold tracking-tight">Opendraft</span>
+                        <span className="truncate text-lg font-semibold tracking-tight">Console Opendraft</span>
                     </div>
                     {onToggleCollapsed && (
                         <ChatTooltip label="Encolher barra lateral">
