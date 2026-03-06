@@ -125,14 +125,14 @@ export function AdminSidebar({
     return (
         <aside className="flex h-full flex-col">
             <div className="pt-2 pb-1 px-3">
-                <div className="flex items-center justify-between gap-2">
+                <div className="group flex items-center justify-between gap-2">
                     <div className="flex min-w-0 flex-1 items-center px-3 py-2 text-sidebar-foreground">
                         <span className="truncate text-lg font-semibold tracking-tight">Opendraft Console</span>
                     </div>
                     <ChatTooltip label="Trocar tema">
                         <button
                             type="button"
-                            className="chat-focus grid h-10 w-10 place-items-center rounded-xl bg-transparent text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors"
+                            className="chat-focus grid h-10 w-10 place-items-center rounded-xl bg-transparent text-sidebar-foreground/60 hover:text-sidebar-foreground transition-all duration-200 opacity-0 group-hover:opacity-100"
                             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                         >
                             <AppIcon name={theme === "dark" ? "Sun" : "Moon"} className={MINI_ICON_CLASS} />
