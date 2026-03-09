@@ -39,40 +39,36 @@ export function ConfirmModal({
     const confirmed = !needsConfirmation || typed === confirmText;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
             {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-md transition-opacity" onClick={onClose} />
 
             {/* Modal */}
-            <div className="relative z-10 w-full max-w-md rounded-2xl border border-sidebar-border/40 bg-background p-6 shadow-xl">
-                <div className="flex items-start justify-between mb-4">
-                    <div>
-                        <h3 className="text-[16px] font-semibold text-foreground">{title}</h3>
-                        {description && (
-                            <p className="text-[13px] text-muted-foreground mt-1">{description}</p>
-                        )}
-                    </div>
-                    <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors">
-                        <AppIcon name="X" className="h-[18px] w-[18px]" />
-                    </button>
+            <div className="relative z-10 w-full max-w-md rounded-[32px] border border-border/10 bg-background p-10 shadow-[0_32px_128px_-16px_rgba(0,0,0,0.3)] animate-in fade-in zoom-in-95 duration-200">
+                <div className="flex flex-col mb-8 text-center items-center">
+                    <h3 className="text-2xl font-serif font-normal text-foreground mb-4">{title}</h3>
+                    {description && (
+                        <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+                    )}
                 </div>
 
                 {/* Custom content */}
-                {children && <div className="mb-4">{children}</div>}
+                {children && <div className="mb-8">{children}</div>}
 
                 {/* Typed confirmation */}
                 {needsConfirmation && (
-                    <div className="mb-4">
-                        <p className="text-[12px] text-muted-foreground mb-2">
-                            Digite <span className="font-mono font-semibold text-foreground">{confirmText}</span> para confirmar
+                    <div className="mb-10">
+                        <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.2em] mb-3 text-center">
+                            Write <span className="text-foreground/60">{confirmText}</span> to confirm
                         </p>
                         <input
                             value={typed}
                             onChange={(e) => setTyped(e.target.value)}
+                            autoFocus
                             className={cn(
-                                "h-10 w-full rounded-lg border border-sidebar-border/40 bg-sidebar-accent/10 px-3",
-                                "text-sm text-foreground placeholder:text-muted-foreground/50 outline-none",
-                                "focus:border-sidebar-primary/40 transition-colors",
+                                "h-14 w-full border-b border-border/20 bg-transparent px-0 text-center",
+                                "text-xl font-serif text-foreground placeholder:text-muted-foreground/20 outline-none",
+                                "focus:border-foreground transition-all duration-300",
                             )}
                             placeholder={confirmText}
                         />
@@ -80,32 +76,29 @@ export function ConfirmModal({
                 )}
 
                 {/* Buttons */}
-                <div className="flex items-center justify-end gap-3">
-                    <button
-                        onClick={onClose}
-                        className={cn(
-                            "chat-focus h-9 px-4 rounded-lg text-sm font-medium transition-colors",
-                            "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/20",
-                        )}
-                    >
-                        Cancelar
-                    </button>
+                <div className="flex flex-col gap-4">
                     <button
                         disabled={!confirmed || loading}
                         onClick={onConfirm}
                         className={cn(
-                            "chat-focus h-9 px-4 rounded-lg text-sm font-medium transition-colors",
-                            "disabled:opacity-40 disabled:pointer-events-none",
+                            "h-14 w-full rounded-full text-sm font-bold uppercase tracking-widest transition-all duration-300",
+                            "disabled:opacity-10 disabled:pointer-events-none",
                             destructive
-                                ? "bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20"
-                                : "bg-sidebar-primary text-sidebar-primary-foreground hover:opacity-90",
+                                ? "bg-red-500 text-white hover:opacity-90"
+                                : "bg-foreground text-background hover:opacity-90",
                         )}
                     >
                         {loading ? (
-                            <div className="h-4 w-4 border-2 border-current/20 border-t-current rounded-full animate-spin" />
+                            <div className="h-5 w-5 border-2 border-current/20 border-t-current rounded-full animate-spin mx-auto" />
                         ) : (
-                            confirmButtonLabel
+                            confirmButtonLabel.toUpperCase()
                         )}
+                    </button>
+                    <button
+                        onClick={onClose}
+                        className="h-14 w-full rounded-full text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-all"
+                    >
+                        CANCEL
                     </button>
                 </div>
             </div>

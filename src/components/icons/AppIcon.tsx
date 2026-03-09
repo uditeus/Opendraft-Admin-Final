@@ -87,6 +87,7 @@ import {
   PackageIcon,
   Building02Icon,
   Saturn01Icon,
+  Navigation06Icon,
   GiftIcon,
   Download01Icon,
   Refresh01Icon,
@@ -124,11 +125,16 @@ const ICON_MAP = {
   Building02Icon: Building02Icon,
   UserIcon: UserIcon,
 
-  // Admin New Icons
+  // Admin Specific
   HomeAdmin: Home01Icon,
   UsageAdmin: Activity01Icon,
   TerminalAdmin: Bug02Icon,
   ServerAdmin: Settings01Icon,
+  ActivityIcon: Activity01Icon,
+  LockIcon: Settings01Icon,
+  LayersIcon: Table02Icon,
+  UserGroupIcon: UserIcon,
+  ArrowDown01Icon: ArrowDown01Icon,
 
   // navigation / common
   Plus: Add01Icon,
@@ -274,7 +280,7 @@ const ICON_MAP = {
   Archive03Icon: Archive03Icon,
   LayoutLeftIcon: LayoutLeftIcon,
   Edit04Icon: Edit04Icon,
-  PlanMode: Saturn01Icon,
+  PlanMode: Navigation06Icon,
   Notification: Notification01Icon,
   Edit2: PencilEdit01Icon,
   Trash2: Delete01Icon,
@@ -312,6 +318,11 @@ export const AppIcon = React.forwardRef<SVGSVGElement, AppIconProps>(
     ref,
   ) => {
     const icon = ICON_MAP[name];
+    if (!icon) {
+      console.warn(`[AppIcon] Icon "${name}" not found in ICON_MAP. Please add it to src/components/icons/AppIcon.tsx`);
+      return null;
+    }
+
     return (
       <HugeiconsIcon
         ref={ref}

@@ -16,8 +16,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     }
 
     // Se o usuário está logado mas ainda não terminou o onboarding (ou é uma conta antiga sem a flag)
-    if (!user.user_metadata?.onboarding_completed && location.pathname !== "/getting-started") {
-        return <Navigate to="/getting-started" replace />;
+    if (!user.user_metadata?.onboarding_completed && location.pathname !== "/onboarding") {
+        return <Navigate to="/onboarding" replace />;
     }
 
     return <>{children}</>;

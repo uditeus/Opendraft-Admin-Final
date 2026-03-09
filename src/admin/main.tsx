@@ -6,6 +6,7 @@ import "../index.css";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
+import { I18nProvider } from "@/i18n/i18n";
 
 const queryClient = new QueryClient();
 
@@ -19,9 +20,11 @@ createRoot(document.getElementById("root")!).render(
                 disableTransitionOnChange
                 storageKey="lovable-chat-theme"
             >
-                <AuthProvider>
-                    <AdminApp />
-                </AuthProvider>
+                <I18nProvider>
+                    <AuthProvider>
+                        <AdminApp />
+                    </AuthProvider>
+                </I18nProvider>
             </ThemeProvider>
         </QueryClientProvider>
     </GlobalError>,

@@ -188,7 +188,7 @@ export function UserAvatarDropdown({
 
           {/* Affiliate Program */}
           <DropdownMenuItem
-            onClick={() => window.open("https://opendraft.us/affiliates", "_blank")}
+            onClick={() => window.open("https://opendraft.me/affiliates", "_blank")}
           >
             <AppIcon name="Star" className="opacity-70" />
             {tt("Programa de Afiliados", "Affiliate program")}
@@ -201,7 +201,7 @@ export function UserAvatarDropdown({
               {tt("Ajuda", "Help")}
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent alignOffset={-8} sideOffset={10} className="w-[320px] px-2 py-2">
-              <DropdownMenuItem onClick={() => window.open("https://docs.opendraft.us", "_blank")}>
+              <DropdownMenuItem onClick={() => window.open("https://docs.opendraft.me", "_blank")}>
                 <AppIcon name="BookOpen" className="opacity-70" />
                 Central de Ajuda
               </DropdownMenuItem>
@@ -214,7 +214,7 @@ export function UserAvatarDropdown({
                 Atalhos de teclado
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => window.open("https://opendraft.us/contact", "_blank")}>
+              <DropdownMenuItem onClick={() => window.open("https://opendraft.me/contact", "_blank")}>
                 <AppIcon name="MessageCircle" className="opacity-70" />
                 Fale conosco
               </DropdownMenuItem>

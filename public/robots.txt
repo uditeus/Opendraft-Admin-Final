@@ -8,4 +8,4 @@ Disallow: /new
 Disallow: /apps/*
 Disallow: /settings
 
-Sitemap: https://opendraft.co/sitemap.xml
+Sitemap: https://opendraft.me/sitemap.xml

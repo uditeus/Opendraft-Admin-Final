@@ -45,7 +45,7 @@ type NavItem = {
 const items: NavItem[] = [
   { id: "new_draft", labelPt: "Novo draft", labelEn: "New draft", Icon: PencilEdit02Icon },
   { id: "library", labelPt: "Biblioteca", labelEn: "Library", Icon: LibrariesIcon },
-  { id: "playbooks", labelPt: "Playbooks", labelEn: "Playbooks", Icon: createAppIcon("Gitbook") },
+  { id: "playbooks", labelPt: "Playbooks", labelEn: "Playbooks", Icon: createAppIcon("Puzzle") },
 ];
 
 export function ChatSidebarDrawer({

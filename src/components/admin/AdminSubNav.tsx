@@ -15,8 +15,8 @@ export function AdminSubNav({ items }: AdminSubNavProps) {
     const location = useLocation();
 
     return (
-        <div className="flex mb-6 -mx-2 overflow-x-auto no-scrollbar scroll-smooth">
-            <div className="flex gap-1.5 px-2">
+        <div className="flex -mx-4 overflow-x-auto no-scrollbar scroll-smooth">
+            <div className="flex px-4 border-b border-border/10 w-full">
                 {items.map((item) => {
                     const active = location.pathname === item.path;
                     return (
@@ -24,10 +24,10 @@ export function AdminSubNav({ items }: AdminSubNavProps) {
                             key={item.path}
                             to={item.path}
                             className={cn(
-                                "flex h-9 items-center rounded-full px-4 text-[13px] font-medium transition-all duration-200",
+                                "flex h-12 items-center px-6 text-[11px] font-bold uppercase tracking-widest transition-all duration-300 border-b-2 -mb-[2px]",
                                 active
-                                    ? "bg-[hsl(var(--chat-active))] text-foreground shadow-sm"
-                                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                                    ? "border-foreground text-foreground"
+                                    : "border-transparent text-muted-foreground hover:text-foreground/80"
                             )}
                         >
                             {item.label}

@@ -38,13 +38,8 @@ export default function AppsPage() {
       return;
     }
 
-    // Create project with skill
-    try {
-      const threadId = await store.createThread(item.id, item.name);
-      navigate(`/workspace/${threadId}`);
-    } catch (err) {
-      console.error("Failed to create thread", err);
-    }
+    // Redirect to /new with the playbook selected
+    navigate(`/new?playbook=${item.id}`);
   };
 
   return (

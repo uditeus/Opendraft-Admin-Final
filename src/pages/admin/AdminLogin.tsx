@@ -25,49 +25,59 @@ export default function AdminLogin() {
     const isLocked = lockoutEnd ? Date.now() < lockoutEnd : false;
 
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-background text-foreground">
-            <div className="w-full max-w-sm px-6">
+        <div className="flex h-screen w-full items-center justify-center bg-background text-foreground selection:bg-foreground selection:text-background">
+            <div className="w-full max-w-sm px-8">
                 {/* Logo */}
-                <div className="flex items-center justify-center gap-2 mb-8">
-                    <AppIcon name="Settings" className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-lg font-semibold tracking-tight">Opendraft</span>
+                <div className="flex flex-col items-center justify-center gap-6 mb-16">
+                    <div className="h-12 w-12 rounded-full bg-foreground flex items-center justify-center">
+                        <AppIcon name="Settings" className="h-6 w-6 text-background" />
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <span className="text-2xl font-serif tracking-tight">Opendraft</span>
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">Admin Panel</span>
+                    </div>
                 </div>
 
-                {/* Card */}
-                <div className="rounded-xl border border-sidebar-border/40 bg-sidebar-accent/10 p-6">
-                    <h1 className="text-[16px] font-semibold text-foreground">Verificar identidade</h1>
-                    <p className="text-[13px] text-muted-foreground mt-1">
-                        Para acessar o painel admin, confirme sua senha.
+                {/* Cardless Login Form */}
+                <div className="flex flex-col">
+                    <h1 className="text-2xl font-serif text-foreground mb-4">Verificar identidade</h1>
+                    <p className="text-sm text-muted-foreground mb-12 leading-relaxed">
+                        Para acessar o painel administrativo, confirme sua senha de acesso.
                     </p>
+
                     {user && (
-                        <p className="text-[13px] text-foreground/80 mt-1 font-medium">{user.email}</p>
+                        <div className="mb-10 pb-6 border-b border-border/10">
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block mb-2">OPERADOR AUTENTICADO</span>
+                            <p className="text-sm font-semibold text-foreground">{user.email}</p>
+                        </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-4">
-                        <div>
-                            <label className="text-[12px] font-medium text-muted-foreground mb-1.5 block">Senha</label>
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+                        <div className="relative group">
                             <input
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 disabled={isLocked}
+                                autoFocus
                                 className={cn(
-                                    "h-10 w-full rounded-lg border border-sidebar-border/40 bg-sidebar-accent/10 px-3",
-                                    "text-sm text-foreground placeholder:text-muted-foreground/50 outline-none",
-                                    "focus:border-sidebar-primary/40 transition-colors",
+                                    "h-14 w-full bg-transparent border-b border-border/20 px-0",
+                                    "text-xl font-serif text-foreground placeholder:text-muted-foreground/20 outline-none",
+                                    "focus:border-foreground transition-all duration-300",
                                     "disabled:opacity-50",
                                 )}
-                                placeholder="••••••••"
+                                placeholder="Sua senha"
                             />
+                            <div className="absolute -bottom-[1px] left-0 w-0 h-[1px] bg-foreground transition-all duration-500 group-focus-within:w-full" />
                         </div>
 
                         {error && (
-                            <p className="text-[12px] text-red-400">{error}</p>
+                            <p className="text-xs font-bold text-red-500 uppercase tracking-widest">{error}</p>
                         )}
 
                         {isLocked && lockoutEnd && (
-                            <p className="text-[12px] text-amber-400">
-                                Muitas tentativas. Tente novamente em {Math.ceil((lockoutEnd - Date.now()) / 60000)} min.
+                            <p className="text-xs font-bold text-amber-500 uppercase tracking-widest">
+                                Bloqueado temporário ({Math.ceil((lockoutEnd - Date.now()) / 60000)} min)
                             </p>
                         )}
 
@@ -75,20 +85,21 @@ export default function AdminLogin() {
                             type="submit"
                             disabled={!password || loading || isLocked}
                             className={cn(
-                                "chat-focus h-10 w-full rounded-lg text-sm font-medium transition-colors",
-                                "bg-sidebar-primary text-sidebar-primary-foreground hover:opacity-90",
-                                "disabled:opacity-40 disabled:pointer-events-none",
+                                "h-14 w-full rounded-full text-sm font-bold transition-all duration-300 tracking-widest uppercase",
+                                "bg-foreground text-background hover:opacity-90 active:scale-[0.98]",
+                                "disabled:opacity-10 disabled:pointer-events-none",
                             )}
                         >
                             {loading ? (
-                                <div className="h-4 w-4 border-2 border-current/20 border-t-current rounded-full animate-spin mx-auto" />
+                                <div className="h-5 w-5 border-2 border-current/20 border-t-current rounded-full animate-spin mx-auto" />
                             ) : (
-                                "Verificar identidade"
+                                "VERIFICAR"
                             )}
                         </button>
 
-                        <p className="text-[11px] text-muted-foreground text-center">
-                            Sessão admin expira em 30 minutos por inatividade
+                        <p className="text-[10px] text-center font-bold text-muted-foreground/40 uppercase tracking-widest leading-loose">
+                            Sessão administrativa protegida.<br />
+                            Expiração automática por inatividade.
                         </p>
                     </form>
                 </div>
@@ -97,10 +108,10 @@ export default function AdminLogin() {
                 <button
                     type="button"
                     onClick={() => window.location.href = "/"}
-                    className="flex items-center gap-2 mx-auto mt-6 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
+                    className="flex items-center justify-center gap-2 mx-auto mt-20 text-[11px] font-bold text-muted-foreground uppercase tracking-widest hover:text-foreground transition-all"
                 >
-                    <AppIcon name="ArrowLeft" className="h-3.5 w-3.5" />
-                    Voltar ao app
+                    <AppIcon name="ArrowLeft" className="h-4 w-4" />
+                    Voltar ao Opendraft
                 </button>
             </div>
         </div>

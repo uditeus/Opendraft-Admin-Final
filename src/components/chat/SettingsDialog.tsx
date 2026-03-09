@@ -622,7 +622,7 @@ export function SettingsDialog({
                         <Button
                           type="button"
                           variant="secondary"
-                          onClick={() => window.open("https://docs.opendraft.us/", "_blank", "noopener,noreferrer")}
+                          onClick={() => window.open("https://docs.opendraft.me/", "_blank", "noopener,noreferrer")}
                         >
                           {tt("Abrir docs", "Open docs")}
                         </Button>

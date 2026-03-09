@@ -4,15 +4,18 @@ alter default privileges in schema public grant all on tables to postgres, anon,
 -- 1. PROFILES
 create table profiles (
   id uuid references auth.users(id) on delete cascade primary key,
+  email text,
   full_name text,
   avatar_url text,
   created_at timestamptz default now()
 );
 
+create index idx_profiles_email on profiles(email);
+
 alter table profiles enable row level security;
 
-create policy "Users can view their own profile" on profiles
-  for select using (auth.uid() = id);
+create policy "Profiles are viewable by everyone" on profiles
+  for select using (true);
 
 create policy "Users can update their own profile" on profiles
   for update using (auth.uid() = id);
@@ -21,8 +24,8 @@ create policy "Users can update their own profile" on profiles
 create or replace function public.handle_new_user()
 returns trigger as $$
 begin
-  insert into public.profiles (id, full_name, avatar_url)
-  values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
+  insert into public.profiles (id, email, full_name, avatar_url)
+  values (new.id, new.email, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
   return new;
 end;
 $$ language plpgsql security definer;

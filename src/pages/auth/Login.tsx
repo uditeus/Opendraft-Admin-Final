@@ -309,8 +309,9 @@ export default function Login() {
     const navigate = useNavigate();
     const { theme, setTheme, resolvedTheme } = useTheme();
     const { tt } = useI18n();
-    const [step, setStep] = React.useState<"email" | "success">("email");
+    const [step, setStep] = React.useState<"email" | "password" | "success">("email");
     const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
     const [loading, setLoading] = React.useState(false);
     const [activeDropdown, setActiveDropdown] = React.useState<string | null>(null);
     const [activeFeature, setActiveFeature] = React.useState(0);
@@ -379,22 +380,64 @@ export default function Login() {
 
     const handleContinue = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!email.trim()) return;
+        const trimmedEmail = email.trim().toLowerCase();
+        if (!trimmedEmail) return;
 
         setLoading(true);
         try {
             const supabase = getSupabase();
-            const { error } = await supabase.auth.signInWithOtp({
-                email: email.trim(),
-                options: {
-                    emailRedirectTo: `${window.location.origin}/new`,
-                },
-            });
-            if (error) throw error;
-            setStep("success");
-            toast.success("Link de verificação enviado!");
+
+            // Debugging user existence check
+            console.log("Checking if user exists for:", trimmedEmail);
+
+            // Check if user exists in profiles (public table)
+            const { data: profile, error: profileError } = await supabase
+                .from("profiles")
+                .select("id")
+                .ilike("email", trimmedEmail)
+                .maybeSingle();
+
+            if (profileError) {
+                console.error("Profile check error:", profileError);
+            }
+
+            console.log("Profile result:", profile);
+
+            if (profile) {
+                // User exists, ask for password
+                setStep("password");
+                toast.info("Bem-vindo de volta! Entre com sua senha.");
+            } else {
+                // New user code sends magic link
+                const { error } = await supabase.auth.signInWithOtp({
+                    email: trimmedEmail,
+                    options: {
+                        emailRedirectTo: `${window.location.origin}/new`,
+                    },
+                });
+                if (error) throw error;
+                setStep("success");
+                toast.success("Link de verificação enviado!");
+            }
         } catch (err: any) {
-            toast.error(err.message || "Erro ao enviar link de verificação");
+            console.error("Login process error:", err);
+            toast.error(err.message || "Erro ao processar login");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handlePasswordLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!password) return;
+
+        setLoading(true);
+        try {
+            const { error } = await signIn(email.trim(), password);
+            if (error) throw error;
+            navigate("/new");
+        } catch (err: any) {
+            toast.error(err.message || "Senha incorreta ou erro no servidor");
         } finally {
             setLoading(false);
         }
@@ -510,9 +553,9 @@ export default function Login() {
                         {/* Card Form */}
                         <div className="w-full max-w-[440px] bg-white dark:bg-[#131416] border border-zinc-200 dark:border-white/10 rounded-[32px] p-8 flex flex-col gap-6 relative min-h-[360px] items-center justify-center">
                             <AnimatePresence mode="wait">
-                                {step !== "success" ? (
+                                {step === "email" ? (
                                     <motion.div
-                                        key="form"
+                                        key="email-step"
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
@@ -562,6 +605,50 @@ export default function Login() {
                                         <p className="text-[12px] text-zinc-500 dark:text-zinc-500 leading-relaxed text-center px-4">
                                             Ao continuar, você reconhece a <Link to="/privacy" className="underline hover:text-zinc-900 dark:hover:text-[#E8E6E3] transition-colors">Política de Privacidade</Link> da Opendraft.
                                         </p>
+                                    </motion.div>
+                                ) : step === "password" ? (
+                                    <motion.div
+                                        key="password-step"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="w-full flex flex-col gap-6"
+                                    >
+                                        <div className="flex flex-col gap-2">
+                                            <h2 className="text-[20px] font-serif text-zinc-900 dark:text-white">Bem-vindo de volta</h2>
+                                            <p className="text-[14px] text-zinc-500 dark:text-zinc-400">Entre com sua senha para {email}</p>
+                                        </div>
+
+                                        <form onSubmit={handlePasswordLogin} className="flex flex-col gap-4 w-full">
+                                            <input
+                                                type="password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                placeholder="Sua senha"
+                                                required
+                                                autoFocus
+                                                disabled={loading}
+                                                className="h-12 w-full rounded-xl bg-zinc-50 dark:bg-[#2C2C2C] border border-transparent px-4 text-[15px] text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 outline-none focus:bg-white dark:focus:bg-[#323232] transition-all"
+                                            />
+
+                                            <button
+                                                type="submit"
+                                                disabled={loading}
+                                                className="flex items-center justify-center gap-2 h-12 w-full rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-[15px] font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all disabled:opacity-50"
+                                            >
+                                                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                                                Entrar
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => setStep("email")}
+                                                className="text-[13px] font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                                            >
+                                                Usar outro e-mail
+                                            </button>
+                                        </form>
                                     </motion.div>
                                 ) : (
                                     <motion.div

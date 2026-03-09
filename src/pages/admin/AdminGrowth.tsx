@@ -5,31 +5,27 @@ import { ACQUISITION_SOURCES as SOURCE_DATA, GROWTH_FUNNEL as FUNNEL } from "@/l
 
 export default function AdminGrowth() {
     return (
-        <div className="flex flex-col gap-10 max-w-5xl mx-auto pb-20">
-            <div className="mt-10">
-                <h1 className="text-3xl font-serif font-semibold text-foreground tracking-tight">Growth</h1>
-                <p className="text-sm text-muted-foreground mt-1">Visitantes, signups, conversão e métricas de canais</p>
+        <div className="flex flex-col w-full h-full pb-20">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 mt-8">
+                <div>
+                    <h1 className="text-4xl font-serif font-normal text-foreground tracking-tight">Growth</h1>
+                    <p className="text-sm text-muted-foreground mt-2">Visitantes, signups, conversão e métricas de canais.</p>
+                </div>
             </div>
 
             {/* KPIs */}
-            <div className="flex flex-wrap items-center justify-between gap-6 px-1 border-b border-border/30 pb-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16 border-b border-border/10 pb-12">
                 {[
-                    { label: "Visitantes (30D)", value: "48.200", change: "+12.4%", changeType: "positive" },
-                    { label: "Signups (30D)", value: "3.420", change: "+8.2%", changeType: "positive" },
-                    { label: "Conversão", value: "2.23%", change: "-0.5%", changeType: "neutral" },
-                    { label: "CAC Médio", value: "R$ 12,40", change: "-R$ 1,20", changeType: "positive", highlight: true },
-                ].map((kpi, i) => (
-                    <div key={i} className="flex flex-col">
-                        <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">{kpi.label}</span>
-                        <div className="mt-1 flex items-baseline gap-2">
-                            <span className={cn("text-3xl font-semibold tracking-tight", kpi.highlight ? "text-[#0066fe]" : "text-foreground")}>
-                                {kpi.value}
-                            </span>
-                            <span className={cn(
-                                "text-xs font-semibold",
-                                kpi.changeType === "positive" ? "text-emerald-500" :
-                                    kpi.changeType === "negative" ? "text-red-500" : "text-muted-foreground"
-                            )}>
+                    { label: "VISITANTES (30D)", value: "48.200", change: "+12.4%" },
+                    { label: "SIGNUPS (30D)", value: "3.420", change: "+8.2%" },
+                    { label: "CONVERSÃO GERAL", value: "2.23%", change: "-0.5%" },
+                    { label: "CAC MÉDIO", value: "R$ 12,40", change: "-R$ 1,20" },
+                ].map((kpi) => (
+                    <div key={kpi.label} className="flex flex-col">
+                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest mb-2">{kpi.label}</span>
+                        <div className="flex items-baseline gap-2">
+                            <p className="text-4xl font-normal text-foreground tracking-tight font-serif">{kpi.value}</p>
+                            <span className={cn("text-xs font-semibold", kpi.change.startsWith("+") ? "text-emerald-500" : "text-emerald-500")}>
                                 {kpi.change}
                             </span>
                         </div>
@@ -38,9 +34,9 @@ export default function AdminGrowth() {
             </div>
 
             {/* Funil Visual */}
-            <div className="border border-border/30 rounded-3xl p-8 bg-background">
-                <h3 className="text-sm font-semibold text-foreground mb-10">Funil de Conversão do Produto</h3>
-                <div className="flex items-end gap-4 h-[200px] max-w-4xl mx-auto">
+            <div className="w-full mb-16">
+                <h3 className="text-xl font-serif text-foreground mb-8">Funil de Conversão do Produto</h3>
+                <div className="flex items-end gap-4 h-[200px] max-w-4xl pt-4">
                     {FUNNEL.map((step, i) => {
                         const maxVal = FUNNEL[0].value;
                         const height = (step.value / maxVal) * 100;
@@ -49,19 +45,19 @@ export default function AdminGrowth() {
                                 <span className="text-sm font-semibold text-foreground tabular-nums opacity-80">{step.value.toLocaleString()}</span>
                                 <div className="w-full relative px-2">
                                     <div
-                                        className="w-full rounded-xl bg-muted/30 transition-all duration-500 group-hover:bg-[#0066fe] group-hover:opacity-80 border border-transparent"
+                                        className="w-full rounded-xl bg-muted/20 transition-all duration-500 group-hover:bg-foreground group-hover:opacity-80"
                                         style={{ height: `${height * 1.5}px` }}
                                     />
                                     {i < FUNNEL.length - 1 && (
                                         <div className="absolute top-1/2 -right-6 -translate-y-1/2 z-10 hidden md:flex items-center">
-                                            <div className="bg-background px-2.5 py-1 rounded-full text-xs font-bold text-[#0066fe] border border-border/50">
+                                            <div className="bg-background px-2 py-1 rounded-full text-[10px] font-bold text-foreground border border-border/30">
                                                 {((FUNNEL[i + 1].value / step.value) * 100).toFixed(0)}%
                                             </div>
                                         </div>
                                     )}
                                 </div>
                                 <div className="flex flex-col items-center text-center">
-                                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{step.name}</span>
+                                    <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">{step.name}</span>
                                 </div>
                             </div>
                         );
@@ -69,11 +65,11 @@ export default function AdminGrowth() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-16">
                 {/* Traffic Analytics */}
-                <div className="border border-border/30 rounded-3xl overflow-hidden bg-background">
-                    <div className="px-6 py-5 border-b border-border/30 flex items-center justify-between">
-                        <h3 className="text-sm font-semibold text-foreground">Tráfego & Analytics</h3>
+                <div className="w-full">
+                    <div className="flex items-center justify-between mb-8">
+                        <h3 className="text-xl font-serif text-foreground">Tráfego & Analytics</h3>
                         <div className="flex items-center gap-2">
                             <div className="h-2 w-2 rounded-full bg-emerald-500" />
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Live</span>
@@ -82,24 +78,24 @@ export default function AdminGrowth() {
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="border-b border-border/30 bg-muted/5">
+                                <tr className="border-b border-border/20">
                                     {["SOURCE", "USERS", "CONVERSIONS", "REVENUE"].map((h) => (
-                                        <th key={h} className="px-6 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">{h}</th>
+                                        <th key={h} className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">{h}</th>
                                     ))}
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-border/20">
+                            <tbody className="divide-y divide-border/10">
                                 {SOURCE_DATA.map((s) => (
-                                    <tr key={s.source} className="hover:bg-muted/10 transition-colors">
-                                        <td className="px-6 py-4 text-sm font-semibold text-foreground">
+                                    <tr key={s.source} className="hover:bg-muted/30 transition-colors">
+                                        <td className="px-4 py-4 text-sm font-medium text-foreground">
                                             <div className="flex flex-col">
                                                 <span>{s.source}</span>
-                                                <span className="text-[10px] font-mono text-muted-foreground uppercase">{s.campaign}</span>
+                                                <span className="text-[10px] font-mono text-muted-foreground uppercase mt-0.5">{s.campaign}</span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-sm font-medium text-foreground">{s.users.toLocaleString()}</td>
-                                        <td className="px-6 py-4 text-sm font-semibold text-[#0066fe]">{s.conversions}</td>
-                                        <td className="px-6 py-4 text-sm font-semibold text-emerald-500">{s.revenue}</td>
+                                        <td className="px-4 py-4 text-sm tabular-nums text-foreground/80">{s.users.toLocaleString()}</td>
+                                        <td className="px-4 py-4 text-sm font-semibold text-foreground">{s.conversions}</td>
+                                        <td className="px-4 py-4 text-sm font-semibold text-emerald-500">{s.revenue}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -108,53 +104,38 @@ export default function AdminGrowth() {
                 </div>
 
                 {/* Efficiency by Channel */}
-                <div className="flex flex-col gap-8">
-                    <div className="border border-border/30 rounded-3xl overflow-hidden bg-background">
-                        <div className="px-6 py-5 border-b border-border/30">
-                            <h3 className="text-sm font-semibold text-foreground">Eficiência (CAC/LTV)</h3>
-                        </div>
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="border-b border-border/30 bg-muted/5">
-                                        {["CANAL", "CVR", "LTV/CAC"].map((h) => (
-                                            <th key={h} className="px-6 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">{h}</th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-border/20">
-                                    {SOURCE_DATA.map((c) => (
-                                        <tr key={c.source} className="hover:bg-muted/10 transition-colors">
-                                            <td className="px-6 py-4 text-sm font-semibold text-foreground">{c.source}</td>
-                                            <td className="px-6 py-4 text-sm font-semibold text-emerald-500 tabular-nums">
-                                                {c.convRate}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-3">
-                                                    <span className="text-sm font-bold text-foreground tabular-nums">{c.ratio}</span>
-                                                    {c.ratio !== "—" && (
-                                                        <div className="h-1.5 w-16 bg-muted/30 rounded-full overflow-hidden">
-                                                            <div className="h-full bg-[#0066fe]" style={{ width: `${Math.min(100, parseFloat(c.ratio))}%` }} />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </td>
-                                        </tr>
+                <div className="w-full">
+                    <h3 className="text-xl font-serif text-foreground mb-8">Eficiência (CAC/LTV)</h3>
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="border-b border-border/20">
+                                    {["CANAL", "CVR", "LTV/CAC"].map((h) => (
+                                        <th key={h} className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">{h}</th>
                                     ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    {/* Simple summary card */}
-                    <div className="border border-border/30 rounded-3xl p-6 flex flex-col items-center justify-center text-center bg-background">
-                        <div className="h-12 w-12 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
-                            <AppIcon name="Activity01Icon" className="h-5 w-5 text-emerald-500" />
-                        </div>
-                        <h4 className="text-lg font-bold text-foreground">Sustentabilidade em 46.9x</h4>
-                        <p className="text-sm text-muted-foreground mt-2 max-w-xs mx-auto">
-                            Seu LTV/CAC médio é excelente. Aumente investimento em canais com CAC abaixo de R$ 15,00.
-                        </p>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-border/10">
+                                {SOURCE_DATA.map((c) => (
+                                    <tr key={c.source} className="hover:bg-muted/30 transition-colors">
+                                        <td className="px-4 py-4 text-sm font-medium text-foreground">{c.source}</td>
+                                        <td className="px-4 py-4 text-sm font-medium text-emerald-500 tabular-nums">
+                                            {c.convRate}
+                                        </td>
+                                        <td className="px-4 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <span className="text-sm font-semibold text-foreground/80 tabular-nums">{c.ratio}</span>
+                                                {c.ratio !== "—" && (
+                                                    <div className="h-1.5 w-16 bg-muted/30 rounded-full overflow-hidden">
+                                                        <div className="h-full bg-foreground" style={{ width: `${Math.min(100, parseFloat(c.ratio))}%` }} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

@@ -91,7 +91,7 @@ export function AdminLayout() {
                 }}
             >
                 <div className="h-full overflow-y-auto no-scrollbar scroll-smooth">
-                    <div className="mx-auto max-w-6xl px-6 lg:px-12 py-8 pt-20">
+                    <div className="w-full px-4 lg:pl-[247px] lg:pr-[246px] pt-16 pb-24">
                         <Outlet />
                     </div>
                 </div>

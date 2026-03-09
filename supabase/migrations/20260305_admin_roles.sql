@@ -3,7 +3,13 @@
 -- Adds role/status/credits to profiles, creates admin_audit_logs
 -- ============================================================
 
--- 1. Add role & status columns to profiles
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS email text;
+CREATE INDEX IF NOT EXISTS idx_profiles_email ON profiles(email);
+
+DROP POLICY IF EXISTS "Users can view their own profile" ON profiles;
+CREATE POLICY "Profiles are viewable by everyone" ON profiles
+  FOR SELECT USING (true);
+
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS role text NOT NULL DEFAULT 'user'
   CHECK (role IN ('user', 'admin', 'dev', 'owner'));
 

@@ -1,5 +1,6 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { apps as playbooksData } from "@/pages/apps/appsData";
 import { AppIcon, createAppIcon } from "@/components/icons/AppIcon";
 
 const FileText = createAppIcon("FileText");
@@ -141,6 +142,7 @@ export function ChatApp() {
   const messages = activeThread?.messages ?? [];
   const isLoaded = activeThread?.messagesLoaded ?? false;
 
+  const isAtNewRoute = !id && (window.location.pathname === "/new" || window.location.pathname === "/chat");
   const [renameDialogOpen, setRenameDialogOpen] = React.useState(false);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [draft, setDraft] = React.useState("");
@@ -152,12 +154,54 @@ export function ChatApp() {
   const [hourlyHeadline, setHourlyHeadline] = React.useState("");
   const [currentHour, setCurrentHour] = React.useState(new Date().getHours());
   const [activePill, setActivePill] = React.useState<null | "write" | "ideas" | "plan" | "analyze">(null);
-  const [activationOrder, setActivationOrder] = React.useState<("style" | "pill")[]>([]);
+  const [selectedPlaybook, setSelectedPlaybook] = React.useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activationOrder, setActivationOrder] = React.useState<("style" | "pill" | "playbook" | "agent")[]>([]);
 
   React.useEffect(() => {
     const userName = user?.user_metadata?.name || user?.user_metadata?.full_name || null;
     setHourlyHeadline(getHourlyHeadline(userName));
   }, [user]);
+
+  // Handle playbook selection from URL
+  React.useEffect(() => {
+    const playbookId = searchParams.get("playbook");
+    if (playbookId && isAtNewRoute) {
+      const playbook = playbooksData.find(p => p.id === playbookId);
+      if (playbook) {
+        setSelectedPlaybook(playbookId);
+        // Clear param after consuming it to prevent re-selection on every render/navigation
+        const newParams = new URLSearchParams(searchParams);
+        newParams.delete("playbook");
+        setSearchParams(newParams, { replace: true });
+      }
+    }
+  }, [searchParams, isAtNewRoute, setSearchParams]);
+
+  // Sync activationOrder when states change
+  React.useEffect(() => {
+    setActivationOrder(prev => {
+      const order = [...prev];
+
+      // Update pill
+      if (activePill && !order.includes("pill")) order.push("pill");
+      else if (!activePill && order.includes("pill")) order.splice(order.indexOf("pill"), 1);
+
+      // Update style
+      if (selectedStyle && !order.includes("style")) order.push("style");
+      else if (!selectedStyle && order.includes("style")) order.splice(order.indexOf("style"), 1);
+
+      // Update playbook
+      if (selectedPlaybook && !order.includes("playbook")) order.push("playbook");
+      else if (!selectedPlaybook && order.includes("playbook")) order.splice(order.indexOf("playbook"), 1);
+
+      // Update agent
+      if (selectedAgent && !order.includes("agent")) order.push("agent");
+      else if (!selectedAgent && order.includes("agent")) order.splice(order.indexOf("agent"), 1);
+
+      return order;
+    });
+  }, [activePill, selectedStyle, selectedPlaybook, selectedAgent]);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -171,7 +215,6 @@ export function ChatApp() {
     return () => clearInterval(interval);
   }, [currentHour, user]);
 
-  const isAtNewRoute = !id && (window.location.pathname === "/new" || window.location.pathname === "/chat");
   const isEmpty = isAtNewRoute && !activeThreadId;
 
   // Dynamic Page Title
@@ -222,7 +265,9 @@ export function ChatApp() {
     } else {
       const run = async () => {
         try {
-          const result = await submitMessage(effectiveId, text, activePill || "default", attachments);
+          const mode = selectedPlaybook || activePill || "default";
+          const result = await submitMessage(effectiveId, text, mode, attachments);
+          setSelectedPlaybook(null);
           if (!id && result?.threadId) {
             navigate(`/chat/${result.threadId}`, { replace: true });
           }
@@ -239,7 +284,9 @@ export function ChatApp() {
   const sendSuggestion = (text: string) => {
     if (typing) return;
     setTyping(true);
-    submitMessage(effectiveId, text, activePill || "default", []).then(result => {
+    const mode = selectedPlaybook || activePill || "default";
+    submitMessage(effectiveId, text, mode, []).then(result => {
+      setSelectedPlaybook(null);
       if (!id && result?.threadId) {
         navigate(`/chat/${result.threadId}`, { replace: true });
       }
@@ -251,7 +298,7 @@ export function ChatApp() {
   };
 
   const quickActions = React.useMemo(() => [
-    { id: "write" as const, label: PILL_CONFIG.write.label, Icon: FileText, prompts: QUICK_PROMPTS.write.map(p => ({ title: p.title, prompt: p.prompt })) },
+    { id: "write" as const, label: PILL_CONFIG.write.label, Icon: createAppIcon("Pen01Icon"), prompts: QUICK_PROMPTS.write.map(p => ({ title: p.title, prompt: p.prompt })) },
     { id: "ideas" as const, label: PILL_CONFIG.ideas.label, Icon: Lightbulb, prompts: QUICK_PROMPTS.ideas.map(p => ({ title: p.title, prompt: p.prompt })) },
     { id: "plan" as const, label: PILL_CONFIG.plan.label, Icon: CalendarClock, prompts: QUICK_PROMPTS.plan.map(p => ({ title: p.title, prompt: p.prompt })) },
     { id: "analyze" as const, label: PILL_CONFIG.analyze.label, Icon: Search, prompts: QUICK_PROMPTS.analyze.map(p => ({ title: p.title, prompt: p.prompt })) },
@@ -306,6 +353,7 @@ export function ChatApp() {
                     value={draft} onChange={setDraft} onSubmit={send} disabled={typing} uiVariant="hero" dropdownSide="bottom"
                     selectedAgent={selectedAgent} onSelectAgent={setSelectedAgent} showShiftHint={false}
                     contextPill={activePill ? { label: PILL_CONFIG[activePill].label, Icon: quickActions.find(q => q.id === activePill)!.Icon, onClear: () => setActivePill(null) } : null}
+                    playbookContext={selectedPlaybook ? { label: playbooksData.find(p => p.id === selectedPlaybook)?.name || "Playbook", onClear: () => setSelectedPlaybook(null) } : null}
                     attachments={attachments} onRemoveAttachment={(idx) => setAttachments(p => p.filter((_, i) => i !== idx))}
                     onAttach={(f) => setAttachments(p => [...p, ...f])} selectedStyle={selectedStyle} onSelectStyle={setSelectedStyle}
                     activePill={activePill} onSelectPill={setActivePill as any} activationOrder={activationOrder}
@@ -344,7 +392,7 @@ export function ChatApp() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="group h-10 rounded-full px-5 bg-[hsl(var(--chat-composer))] border-border/60 text-foreground/70 hover:bg-[hsl(var(--chat-hover))] hover:text-foreground shadow-sm"
+                                className="group h-10 rounded-full px-5 bg-[hsl(var(--chat-composer))] border-border/60 dark:border-none text-foreground/70 hover:bg-[hsl(var(--chat-hover))] hover:text-foreground shadow-sm"
                                 onClick={() => setActivePill(id)}
                               >
                                 <Icon className="h-4.5 w-4.5 text-muted-foreground group-hover:text-foreground" />
@@ -460,6 +508,8 @@ export function ChatApp() {
                     value={draft} onChange={setDraft} onSubmit={send} disabled={activeThread?.isTyping || typing}
                     placeholder={messages.length === 0 ? "Como posso ajudar?" : "Pergunte algo"}
                     uiVariant="hero" dropdownSide="top" selectedAgent={selectedAgent} onSelectAgent={setSelectedAgent} showShiftHint={true}
+                    contextPill={activePill ? { label: PILL_CONFIG[activePill].label, Icon: quickActions.find(q => q.id === activePill)!.Icon, onClear: () => setActivePill(null) } : null}
+                    playbookContext={selectedPlaybook ? { label: playbooksData.find(p => p.id === selectedPlaybook)?.name || "Playbook", onClear: () => setSelectedPlaybook(null) } : null}
                     attachments={attachments} onRemoveAttachment={(idx) => setAttachments(p => p.filter((_, i) => i !== idx))}
                     onAttach={(f) => setAttachments(p => [...p, ...f])} selectedStyle={selectedStyle} onSelectStyle={setSelectedStyle}
                     activePill={activePill} onSelectPill={setActivePill as any} activationOrder={activationOrder}

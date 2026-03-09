@@ -20,7 +20,7 @@ const SEARCH_ITEMS = [
     { type: "page", label: "Tráfego & Aquisição", path: "/admin/growth", icon: "ChartBarIcon" },
     { type: "page", label: "Retenção", path: "/admin/analytics/retention", icon: "UserGroupIcon" },
     { type: "page", label: "Produto", path: "/admin/product", icon: "Compass" },
-    { type: "page", label: "Economics", path: "/admin/economics", icon: "Saturn01Icon" },
+    { type: "page", label: "Economics", path: "/admin/economics", icon: "PlanMode" },
     { type: "page", label: "Tickets", path: "/admin/tickets", icon: "MessageSquare" },
     { type: "page", label: "Logs", path: "/admin/logs", icon: "Gitbook" },
     { type: "page", label: "Sistema", path: "/admin/settings", icon: "Settings" },
@@ -112,61 +112,77 @@ export function AdminCommandPalette() {
     return (
         <>
             {/* Backdrop */}
-            <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
+            <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-md transition-opacity" onClick={() => setOpen(false)} />
 
             {/* Palette */}
-            <div className="fixed left-1/2 top-[20%] z-50 w-full max-w-[540px] -translate-x-1/2 rounded-xl border border-sidebar-border/50 bg-popover shadow-2xl overflow-hidden">
+            <div className="fixed left-1/2 top-[15%] z-[100] w-full max-w-[640px] -translate-x-1/2 rounded-[32px] border border-border/10 bg-background shadow-[0_32px_128px_-16px_rgba(0,0,0,0.3)] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                 {/* Input */}
-                <div className="flex items-center gap-3 border-b border-sidebar-border/30 px-4 py-3">
-                    <AppIcon name="Search" className="h-4 w-4 text-muted-foreground shrink-0" />
+                <div className="flex items-center gap-4 px-8 py-6 border-b border-border/10">
+                    <AppIcon name="Search" className="h-6 w-6 text-foreground/40 shrink-0" />
                     <input
                         ref={inputRef}
                         value={query}
                         onChange={(e) => { setQuery(e.target.value); setSelectedIndex(0); }}
                         onKeyDown={handleKeyDown}
-                        placeholder="Buscar usuário, página, transação, ticket..."
-                        className="flex-1 bg-transparent text-[14px] text-foreground placeholder:text-muted-foreground/50 outline-none"
+                        placeholder="Search for anything..."
+                        className="flex-1 bg-transparent text-xl font-serif text-foreground placeholder:text-muted-foreground/30 outline-none"
                     />
-                    <kbd className="hidden sm:inline text-[10px] text-muted-foreground/50 border border-sidebar-border/30 rounded px-1.5 py-0.5 font-mono">ESC</kbd>
+                    <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/10 bg-muted/20 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                        <span>ESC</span>
+                    </div>
                 </div>
 
                 {/* Results */}
-                <div className="max-h-[360px] overflow-y-auto py-2">
+                <div className="max-h-[480px] overflow-y-auto py-6 px-4 no-scrollbar">
                     {filtered.length === 0 && (
-                        <div className="px-4 py-8 text-center text-[13px] text-muted-foreground">Nenhum resultado encontrado</div>
+                        <div className="px-8 py-12 text-center text-sm text-muted-foreground/50 font-serif italic">Nenhum resultado encontrado</div>
                     )}
 
                     {Object.entries(grouped).map(([type, items]) => (
-                        <div key={type}>
-                            <div className="px-4 py-1.5">
-                                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/50">{TYPE_LABEL[type] || type}</span>
+                        <div key={type} className="mb-8 last:mb-0">
+                            <div className="px-4 mb-2">
+                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/30">{TYPE_LABEL[type] || type}</span>
                             </div>
-                            {items.map((item) => {
-                                const globalIdx = flatItems.indexOf(item);
-                                return (
-                                    <button
-                                        key={item.label + item.path}
-                                        onClick={() => handleSelect(item)}
-                                        onMouseEnter={() => setSelectedIndex(globalIdx)}
-                                        className={cn(
-                                            "flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors",
-                                            globalIdx === selectedIndex ? "bg-sidebar-accent/20" : "hover:bg-sidebar-accent/10",
-                                        )}
-                                    >
-                                        <AppIcon name={item.icon as any} className="h-4 w-4 text-muted-foreground/60 shrink-0" />
-                                        <span className="text-[13px] text-foreground/80">{item.label}</span>
-                                    </button>
-                                );
-                            })}
+                            <div className="grid gap-1">
+                                {items.map((item) => {
+                                    const globalIdx = flatItems.indexOf(item);
+                                    const active = globalIdx === selectedIndex;
+                                    return (
+                                        <button
+                                            key={item.label + item.path}
+                                            onClick={() => handleSelect(item)}
+                                            onMouseEnter={() => setSelectedIndex(globalIdx)}
+                                            className={cn(
+                                                "flex w-full items-center gap-4 px-4 py-3.5 text-left transition-all rounded-2xl",
+                                                active ? "bg-foreground text-background" : "text-foreground/70 hover:bg-muted/30",
+                                            )}
+                                        >
+                                            <div className={cn(
+                                                "h-10 w-10 rounded-full flex items-center justify-center transition-colors",
+                                                active ? "bg-background/10" : "bg-muted/30"
+                                            )}>
+                                                <AppIcon name={item.icon as any} className={cn("h-5 w-5", active ? "text-background" : "text-muted-foreground")} />
+                                            </div>
+                                            <span className="text-base font-medium">{item.label}</span>
+                                            {active && (
+                                                <span className="ml-auto text-[10px] font-bold uppercase tracking-widest opacity-40">SELECT</span>
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </div>
                     ))}
                 </div>
 
                 {/* Footer */}
-                <div className="border-t border-sidebar-border/30 px-4 py-2 flex items-center gap-4 text-[10px] text-muted-foreground/50">
-                    <span>↑↓ navegar</span>
-                    <span>↵ selecionar</span>
-                    <span>esc fechar</span>
+                <div className="border-t border-border/10 px-8 py-4 flex items-center gap-8 text-[10px] font-bold text-muted-foreground/30 uppercase tracking-[0.15em]">
+                    <div className="flex items-center gap-2">
+                        <span className="text-foreground/40">↑↓</span> NAVEGAR
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="text-foreground/40">ENTER</span> SELECIONAR
+                    </div>
                 </div>
             </div>
         </>

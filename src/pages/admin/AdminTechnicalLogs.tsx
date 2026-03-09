@@ -3,10 +3,10 @@ import { AdminTable } from "@/components/admin/AdminTable";
 import { cn } from "@/lib/utils";
 
 const LEVEL_COLORS: Record<string, string> = {
-    INFO: "text-blue-400 bg-blue-500/10",
-    WARN: "text-amber-400 bg-amber-500/10",
-    ERROR: "text-red-400 bg-red-500/10",
-    DEBUG: "text-muted-foreground bg-sidebar-accent/20",
+    INFO: "text-foreground bg-foreground/10",
+    WARN: "text-amber-500 bg-amber-500/10",
+    ERROR: "text-red-500 bg-red-500/10",
+    DEBUG: "text-muted-foreground bg-muted/20",
 };
 
 const MOCK_TECH_LOGS = Array.from({ length: 40 }, (_, i) => ({
@@ -46,73 +46,93 @@ export default function AdminTechnicalLogs() {
     const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
 
     return (
-        <div className="flex flex-col gap-6">
-            <div>
-                <h1 className="text-[26px] font-serif font-semibold text-foreground tracking-tight">Technical Logs</h1>
-                <p className="text-[13.5px] text-muted-foreground mt-0.5">Logs de sistema em tempo real — visível apenas para desenvolvedores</p>
+        <div className="flex flex-col w-full h-full pb-20">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 mt-8">
+                <div>
+                    <h1 className="text-[42px] font-serif font-normal text-foreground tracking-tight leading-tight">Technical Logs</h1>
+                    <p className="text-[15px] text-muted-foreground mt-3 font-normal">Telemetria de sistema e depuração em tempo real para infraestrutura.</p>
+                </div>
             </div>
 
-            <div className="flex items-center gap-3">
-                <select
-                    value={levelFilter}
-                    onChange={(e) => { setLevelFilter(e.target.value); setPage(1); }}
-                    className={cn(
-                        "h-9 rounded-full border border-border/40 bg-card px-4",
-                        "text-[12px] font-bold text-foreground/70 outline-none focus:border-[#3E768D]/40 transition-all",
-                    )}
-                >
-                    <option value="all">TODOS OS NÍVEIS</option>
-                    <option value="ERROR">ERROR</option>
-                    <option value="WARN">WARN</option>
-                    <option value="INFO">INFO</option>
-                    <option value="DEBUG">DEBUG</option>
-                </select>
+            {/* Quick Filters - Level & Service */}
+            <div className="flex flex-col gap-8 mb-16">
+                <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-[11px] font-medium text-muted-foreground/40 uppercase tracking-widest mr-3 shrink-0">Nível</span>
+                    {["all", "ERROR", "WARN", "INFO", "DEBUG"].map((f) => (
+                        <button
+                            key={f}
+                            onClick={() => { setLevelFilter(f); setPage(1); }}
+                            className={cn(
+                                "h-9 px-5 rounded-full text-[12px] font-medium transition-all border shrink-0",
+                                levelFilter === f
+                                    ? "bg-foreground text-background border-foreground shadow-sm"
+                                    : "bg-muted/5 border-border/10 text-muted-foreground hover:border-border/20 hover:text-foreground",
+                            )}
+                        >
+                            {f === 'all' ? 'Todos' : f}
+                        </button>
+                    ))}
+                </div>
 
-                <select
-                    value={serviceFilter}
-                    onChange={(e) => { setServiceFilter(e.target.value); setPage(1); }}
-                    className={cn(
-                        "h-9 rounded-full border border-border/40 bg-card px-4",
-                        "text-[12px] font-bold text-foreground/70 outline-none focus:border-[#3E768D]/40 transition-all",
-                    )}
-                >
-                    <option value="all">TODOS OS SERVIÇOS</option>
-                    <option value="api-gateway">api-gateway</option>
-                    <option value="auth-service">auth-service</option>
-                    <option value="ai-worker">ai-worker</option>
-                    <option value="payment-service">payment-service</option>
-                    <option value="queue">queue</option>
-                </select>
+                <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-[11px] font-medium text-muted-foreground/40 uppercase tracking-widest mr-3 shrink-0">Serviço</span>
+                    {["all", "api-gateway", "auth-service", "ai-worker", "payment-service", "queue"].map((f) => (
+                        <button
+                            key={f}
+                            onClick={() => { setServiceFilter(f); setPage(1); }}
+                            className={cn(
+                                "h-9 px-5 rounded-full text-[12px] font-medium transition-all border shrink-0",
+                                serviceFilter === f
+                                    ? "bg-foreground text-background border-foreground shadow-sm"
+                                    : "bg-muted/5 border-border/10 text-muted-foreground hover:border-border/20 hover:text-foreground",
+                            )}
+                        >
+                            {f === 'all' ? 'Todos' : f}
+                        </button>
+                    ))}
+                </div>
             </div>
 
-            <div className="rounded-xl border border-border/50 bg-card shadow-sm overflow-hidden">
+            <div className="w-full">
                 <AdminTable
                     columns={[
                         {
-                            key: "timestamp", label: "TIMESTAMP", render: (r) => (
-                                <span className="text-[11px] text-muted-foreground font-mono font-bold whitespace-nowrap">{r.timestamp}</span>
+                            key: "timestamp", label: "Timestamp", render: (r) => (
+                                <div className="flex flex-col">
+                                    <span className="text-[11px] text-muted-foreground/50 font-mono tabular-nums">{r.timestamp.split(' ')[0]}</span>
+                                    <span className="text-[13px] text-foreground font-mono font-medium tabular-nums">{r.timestamp.split(' ')[1]}</span>
+                                </div>
                             )
                         },
                         {
-                            key: "level", label: "LEVEL", render: (r) => (
-                                <span className={cn("rounded-full px-3 py-1 text-[10px] font-bold tracking-widest", LEVEL_COLORS[r.level] || "")}>
+                            key: "level", label: "Level", render: (r) => (
+                                <span className={cn(
+                                    "px-2 py-0.5 rounded-md text-[10px] font-bold tracking-widest uppercase border",
+                                    LEVEL_COLORS[r.level] || "text-muted-foreground bg-muted/5 border-border/5"
+                                )}>
                                     {r.level}
                                 </span>
                             )
                         },
                         {
-                            key: "service", label: "SERVICE", render: (r) => (
-                                <span className="text-[12px] text-[#3E768D] font-bold font-mono lowercase">{r.service}</span>
+                            key: "service", label: "Service", render: (r) => (
+                                <span className="text-[11px] text-foreground/40 font-mono font-bold tracking-tight bg-muted/5 px-2 py-1 rounded-md lowercase">
+                                    {r.service}
+                                </span>
                             )
                         },
                         {
-                            key: "message", label: "MESSAGE", render: (r) => (
-                                <span className="text-[12.5px] text-foreground/80 font-mono font-medium max-w-[500px] truncate block">{r.message}</span>
+                            key: "message", label: "Trace Message", render: (r) => (
+                                <span className="text-[13px] text-foreground/90 font-mono font-normal max-w-[450px] truncate block leading-relaxed">
+                                    {r.message}
+                                </span>
                             )
                         },
                         {
-                            key: "traceId", label: "TRACE_ID", render: (r) => (
-                                <span className="text-[10px] text-muted-foreground/40 font-mono font-bold uppercase">{r.traceId}</span>
+                            key: "traceId", label: "Trace ID", render: (r) => (
+                                <span className="text-[10px] text-muted-foreground/20 font-mono font-medium uppercase tracking-tight hover:text-muted-foreground/40 transition-colors cursor-pointer">
+                                    {r.traceId}
+                                </span>
                             )
                         },
                     ]}
@@ -124,8 +144,8 @@ export default function AdminTechnicalLogs() {
                     onPageChange={setPage}
                     searchValue={search}
                     onSearchChange={(v) => { setSearch(v); setPage(1); }}
-                    searchPlaceholder="Search logs or trace IDs..."
-                    emptyMessage="Nenhum log técnico encontrado"
+                    searchPlaceholder="Eventos, traces ou identificadores..."
+                    emptyMessage="Nenhuma telemetria encontrada para estes critérios"
                 />
             </div>
         </div>

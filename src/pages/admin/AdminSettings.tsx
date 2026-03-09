@@ -61,73 +61,72 @@ export default function AdminSettings() {
     };
 
     return (
-        <div className="flex flex-col gap-10 max-w-5xl mx-auto pb-20">
-            <div className="mt-10">
-                <h1 className="text-3xl font-serif font-semibold text-foreground tracking-tight">Settings & Developer</h1>
-                <p className="text-sm text-muted-foreground mt-1">Configurações de infraestrutura, prompts, modelos e feature flags</p>
+        <div className="flex flex-col w-full h-full pb-20">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 mt-8">
+                <div>
+                    <h1 className="text-4xl font-serif font-normal text-foreground tracking-tight">Settings & Developer</h1>
+                    <p className="text-sm text-muted-foreground mt-2">Configurações de infraestrutura, prompts, modelos e flags.</p>
+                </div>
             </div>
 
             {/* Kill Switch */}
-            <div className={cn(
-                "rounded-3xl border-2 p-8 flex flex-col md:flex-row items-center md:items-start justify-between transition-all duration-300",
-                killSwitch
-                    ? "border-red-500 bg-red-500/5"
-                    : "border-border/50 bg-background"
-            )}>
-                <div className="flex items-start gap-4 text-center md:text-left">
-                    <div className={cn(
-                        "mt-1 p-2 rounded-xl transition-colors shrink-0",
-                        killSwitch ? "bg-red-500 text-white" : "bg-red-500/10 text-red-500"
-                    )}>
-                        <AppIcon name="Zap" className="h-6 w-6" />
+            <div className="w-full mb-16">
+                <div className={cn(
+                    "flex flex-col md:flex-row items-center md:items-start justify-between transition-all duration-300",
+                    "border-l-4 pl-6",
+                    killSwitch ? "border-red-500" : "border-border/50"
+                )}>
+                    <div className="flex items-start gap-4 text-center md:text-left">
+                        <div className={cn(
+                            "mt-1 p-2 rounded-xl transition-colors shrink-0",
+                            killSwitch ? "bg-red-500 text-white" : "bg-red-500/10 text-red-500"
+                        )}>
+                            <AppIcon name="Zap" className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-foreground flex flex-col md:flex-row items-center gap-2">
+                                Kill Switch — Geração IA
+                                {killSwitch && <span className="mt-2 md:mt-0 px-2 py-0.5 rounded-full bg-red-500 text-white text-[10px] uppercase tracking-widest animate-pulse">Emergência Ativa</span>}
+                            </h3>
+                            <p className="text-sm text-muted-foreground mt-2 max-w-md">Desativa instantaneamente toda a API de geração para todos os usuários. Use em falhas críticas de faturamento ou infraestrutura.</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 className="text-xl font-bold text-foreground flex flex-col md:flex-row items-center gap-2">
-                            Kill Switch — Geração IA
-                            {killSwitch && <span className="mt-2 md:mt-0 px-2 py-0.5 rounded-full bg-red-500 text-white text-[10px] uppercase tracking-widest animate-pulse">Emergência Ativa</span>}
-                        </h3>
-                        <p className="text-sm text-muted-foreground mt-2 max-w-md">Desativa instantaneamente toda a API de geração para todos os usuários. Use em falhas críticas de faturamento ou infraestrutura.</p>
-                    </div>
+                    <button
+                        onClick={() => setKillSwitch(!killSwitch)}
+                        className={cn(
+                            "mt-6 md:mt-0 px-8 py-3 w-full md:w-auto text-sm font-bold transition-all whitespace-nowrap",
+                            killSwitch ? "text-emerald-500 hover:opacity-80" : "text-red-500 hover:opacity-80"
+                        )}
+                    >
+                        {killSwitch ? "REATIVAR SISTEMAS" : "TRIGGER SHUTDOWN"}
+                    </button>
                 </div>
-                <button
-                    onClick={() => setKillSwitch(!killSwitch)}
-                    className={cn(
-                        "mt-6 md:mt-0 px-8 py-3 rounded-full text-sm font-bold transition-all whitespace-nowrap",
-                        killSwitch
-                            ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                            : "bg-red-600 text-white hover:bg-red-700"
-                    )}
-                >
-                    {killSwitch ? "REATIVAR SISTEMAS" : "TRIGGER SHUTDOWN"}
-                </button>
             </div>
 
             {/* Health Checks */}
-            <div className="border border-border/30 rounded-3xl overflow-hidden bg-background">
-                <div className="px-6 py-5 border-b border-border/30">
-                    <h3 className="text-sm font-semibold text-foreground">Infraestrutura & Serviços Externos</h3>
-                </div>
+            <div className="w-full mb-16">
+                <h3 className="text-xl font-serif text-foreground mb-8">Infraestrutura & Serviços Externos</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-border/30 bg-muted/5">
+                            <tr className="border-b border-border/20">
                                 {["SERVIÇO", "STATUS", "LATÊNCIA", "UPTIME"].map((h) => (
-                                    <th key={h} className="px-6 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">{h}</th>
+                                    <th key={h} className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">{h}</th>
                                 ))}
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-border/20">
+                        <tbody className="divide-y divide-border/10">
                             {HEALTH.map((h) => (
-                                <tr key={h.service} className="hover:bg-muted/10 transition-colors">
-                                    <td className="px-6 py-4 text-sm font-semibold text-foreground">{h.service}</td>
-                                    <td className="px-6 py-4">
+                                <tr key={h.service} className="hover:bg-muted/30 transition-colors">
+                                    <td className="px-4 py-4 text-sm font-medium text-foreground">{h.service}</td>
+                                    <td className="px-4 py-4">
                                         <div className="flex items-center gap-2">
                                             <div className={cn("w-2 h-2 rounded-full", h.status === "ok" ? "bg-emerald-500" : h.status === "degraded" ? "bg-amber-500" : "bg-red-500")}></div>
                                             <span className={cn("text-[10px] font-bold uppercase tracking-wider", STATUS_COLOR[h.status])}>{h.status}</span>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 text-sm font-mono text-muted-foreground">{h.latency}</td>
-                                    <td className="px-6 py-4 text-sm text-muted-foreground">{h.uptime}</td>
+                                    <td className="px-4 py-4 text-sm font-mono text-muted-foreground">{h.latency}</td>
+                                    <td className="px-4 py-4 text-sm text-muted-foreground">{h.uptime}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -135,23 +134,21 @@ export default function AdminSettings() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 mb-16">
                 {/* Prompt Manager */}
                 <div className="flex flex-col">
-                    <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-xs font-semibold text-foreground uppercase tracking-widest">Prompt Manager</h3>
-                    </div>
+                    <h3 className="text-xl font-serif text-foreground mb-8">Prompt Manager</h3>
                     <div className="space-y-4">
                         {PROMPTS.map((p) => (
-                            <div key={p.id} className="rounded-3xl border border-border/30 p-5 bg-background hover:bg-muted/5 transition-colors">
+                            <div key={p.id} className="border-b border-border/20 pb-4 last:border-0 last:pb-0 hover:bg-muted/10 p-4 -mx-4 rounded-xl transition-colors">
                                 <div className="flex items-center justify-between mb-4">
                                     <div>
-                                        <span className="text-sm font-semibold text-[#0066fe]">{p.label}</span>
+                                        <span className="text-sm font-semibold text-foreground">{p.label}</span>
                                         <p className="text-xs text-muted-foreground mt-0.5">{p.desc}</p>
                                     </div>
                                     <button
                                         onClick={() => setEditingPrompt(editingPrompt === p.id ? null : p.id)}
-                                        className="text-xs font-medium text-foreground hover:text-[#0066fe] transition-colors"
+                                        className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
                                     >
                                         {editingPrompt === p.id ? "FECHAR" : "EDITAR"}
                                     </button>
@@ -160,10 +157,10 @@ export default function AdminSettings() {
                                     <div className="animate-in fade-in slide-in-from-top-2 duration-300">
                                         <textarea
                                             defaultValue={p.value}
-                                            className="w-full rounded-xl border border-border/40 bg-muted/20 p-4 text-xs font-mono resize-none h-40 outline-none focus:border-[#0066fe] transition-all leading-relaxed"
+                                            className="w-full rounded-xl border border-border/40 bg-transparent p-4 text-sm font-mono resize-none h-40 outline-none focus:border-foreground transition-all leading-relaxed"
                                         />
                                         <div className="mt-3 flex justify-end">
-                                            <button className="px-6 py-2 rounded-full text-xs font-bold bg-[#0066fe] text-white hover:bg-[#0052cc] transition-colors">
+                                            <button className="px-6 py-2 rounded-full text-[13px] font-medium bg-foreground text-background hover:opacity-90 transition-opacity">
                                                 Salvar Alterações
                                             </button>
                                         </div>
@@ -177,35 +174,24 @@ export default function AdminSettings() {
                 </div>
 
                 {/* Second column: Models & Flags */}
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-16">
                     {/* Feature Flags */}
-                    <div className="border border-border/30 rounded-3xl overflow-hidden bg-background">
-                        <div className="px-6 py-5 border-b border-border/30">
-                            <h3 className="text-sm font-semibold text-foreground">Feature Flags</h3>
-                        </div>
-                        <div className="divide-y divide-border/20">
+                    <div className="w-full">
+                        <h3 className="text-xl font-serif text-foreground mb-8">Feature Flags</h3>
+                        <div className="divide-y divide-border/10">
                             {flags.map((f) => (
-                                <div key={f.id} className="flex items-center justify-between p-5 hover:bg-muted/5 transition-colors">
+                                <div key={f.id} className="flex items-center justify-between py-4 hover:bg-muted/10 px-2 -mx-2 rounded-xl transition-colors">
                                     <div className="flex items-center gap-4">
                                         <div>
-                                            <span className="text-sm font-semibold text-foreground flex items-center gap-2">
+                                            <span className="text-sm font-medium text-foreground flex items-center gap-2">
                                                 {f.label}
-                                                {f.critical && <AppIcon name="AlertCircle" className="w-3.5 h-3.5 text-amber-500" />}
+                                                {f.critical && <AppIcon name="Zap" className="w-3.5 h-3.5 text-amber-500" />}
                                             </span>
                                             <p className="text-xs text-muted-foreground mt-0.5">{f.desc}</p>
                                         </div>
                                     </div>
-                                    <button
-                                        onClick={() => toggleFlag(f.id)}
-                                        className={cn(
-                                            "w-11 h-6 rounded-full transition-all relative shrink-0",
-                                            f.enabled ? "bg-[#0066fe]" : "bg-muted"
-                                        )}
-                                    >
-                                        <div className={cn(
-                                            "absolute top-1 h-4 w-4 rounded-full bg-white transition-all shadow-sm",
-                                            f.enabled ? "translate-x-6" : "translate-x-1"
-                                        )} />
+                                    <button onClick={() => toggleFlag(f.id)} className={cn("w-11 h-6 rounded-full transition-all relative shrink-0", f.enabled ? "bg-foreground" : "bg-muted")}>
+                                        <div className={cn("absolute top-1 h-4 w-4 rounded-full bg-white transition-all shadow-sm", f.enabled ? "translate-x-6" : "translate-x-1")} />
                                     </button>
                                 </div>
                             ))}
@@ -213,17 +199,15 @@ export default function AdminSettings() {
                     </div>
 
                     {/* Model Routing */}
-                    <div className="border border-border/30 rounded-3xl overflow-hidden bg-background">
-                        <div className="px-6 py-5 border-b border-border/30">
-                            <h3 className="text-sm font-semibold text-foreground">Model Routing</h3>
-                        </div>
-                        <div className="divide-y divide-border/20 p-5 space-y-4">
+                    <div className="w-full">
+                        <h3 className="text-xl font-serif text-foreground mb-8">Model Routing</h3>
+                        <div className="space-y-6">
                             {MODELS.map((m) => (
-                                <div key={m.id} className="pt-4 first:pt-0">
-                                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-2">{m.label}</span>
+                                <div key={m.id}>
+                                    <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-2">{m.label}</span>
                                     <select
                                         defaultValue={m.current}
-                                        className="w-full bg-transparent border border-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-foreground outline-none focus:border-[#0066fe] transition-all appearance-none cursor-pointer"
+                                        className="w-full bg-transparent border-b border-border/30 pb-2 text-sm font-medium text-foreground outline-none focus:border-foreground transition-all appearance-none cursor-pointer"
                                     >
                                         {m.options.map((o) => (
                                             <option key={o} value={o} className="bg-background text-foreground">{o}</option>
@@ -237,26 +221,24 @@ export default function AdminSettings() {
             </div>
 
             {/* Rate Limits & Pricing tables */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="border border-border/30 rounded-3xl overflow-hidden bg-background">
-                    <div className="px-6 py-5 border-b border-border/30">
-                        <h3 className="text-sm font-semibold text-foreground">Rate Limits (Globit)</h3>
-                    </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div className="w-full">
+                    <h3 className="text-xl font-serif text-foreground mb-8">Rate Limits</h3>
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="border-b border-border/30 bg-muted/5">
+                                <tr className="border-b border-border/20">
                                     {["PLANO", "R/MIN", "T/DIA"].map((h) => (
-                                        <th key={h} className="px-6 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">{h}</th>
+                                        <th key={h} className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">{h}</th>
                                     ))}
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-border/20">
+                            <tbody className="divide-y divide-border/10">
                                 {RATE_LIMITS.map((r) => (
-                                    <tr key={r.plan} className="hover:bg-muted/10 transition-colors">
-                                        <td className="px-6 py-4 text-sm font-semibold text-foreground">{r.plan}</td>
-                                        <td className="px-6 py-4 text-sm font-semibold text-[#0066fe]">{r.reqMin === 0 ? "∞" : r.reqMin}</td>
-                                        <td className="px-6 py-4 text-sm text-muted-foreground">{r.tokensDay === 0 ? "∞" : (r.tokensDay / 1000).toLocaleString() + "k"}</td>
+                                    <tr key={r.plan} className="hover:bg-muted/30 transition-colors">
+                                        <td className="px-4 py-4 text-sm font-medium text-foreground">{r.plan}</td>
+                                        <td className="px-4 py-4 text-sm font-semibold text-foreground">{r.reqMin === 0 ? "∞" : r.reqMin}</td>
+                                        <td className="px-4 py-4 text-sm text-muted-foreground">{r.tokensDay === 0 ? "∞" : (r.tokensDay / 1000).toLocaleString() + "k"}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -264,25 +246,23 @@ export default function AdminSettings() {
                     </div>
                 </div>
 
-                <div className="border border-border/30 rounded-3xl overflow-hidden bg-background">
-                    <div className="px-6 py-5 border-b border-border/30">
-                        <h3 className="text-sm font-semibold text-foreground">Preificação de Tokens</h3>
-                    </div>
+                <div className="w-full">
+                    <h3 className="text-xl font-serif text-foreground mb-8">Preços por Token</h3>
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="border-b border-border/30 bg-muted/5">
+                                <tr className="border-b border-border/20">
                                     {["MODELO", "INPUT", "OUTPUT"].map((h) => (
-                                        <th key={h} className="px-6 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">{h}</th>
+                                        <th key={h} className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">{h}</th>
                                     ))}
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-border/20">
+                            <tbody className="divide-y divide-border/10">
                                 {TOKEN_PRICING.map((t) => (
-                                    <tr key={t.model} className="hover:bg-muted/10 transition-colors">
-                                        <td className="px-6 py-4 text-sm font-mono text-muted-foreground">{t.model}</td>
-                                        <td className="px-6 py-4 text-sm font-medium text-emerald-500">{t.input}</td>
-                                        <td className="px-6 py-4 text-sm font-medium text-emerald-500">{t.output}</td>
+                                    <tr key={t.model} className="hover:bg-muted/30 transition-colors">
+                                        <td className="px-4 py-4 text-[13px] font-mono text-muted-foreground">{t.model}</td>
+                                        <td className="px-4 py-4 text-sm font-medium text-emerald-500">{t.input}</td>
+                                        <td className="px-4 py-4 text-sm font-medium text-emerald-500">{t.output}</td>
                                     </tr>
                                 ))}
                             </tbody>

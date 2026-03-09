@@ -21,7 +21,7 @@ export function ShareDialog({ open, onOpenChange }: ShareDialogProps) {
     }, [open]);
 
     // Mock invite link - in production this would come from user metadata or API
-    const inviteLink = `https://opendraft.us/invite/${user?.id?.slice(0, 8) || "u-123456"}`;
+    const inviteLink = `https://opendraft.me/invite/${user?.id?.slice(0, 8) || "u-123456"}`;
 
     const handleCopy = () => {
         navigator.clipboard.writeText(inviteLink);

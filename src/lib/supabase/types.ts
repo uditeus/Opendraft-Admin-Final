@@ -12,20 +12,53 @@ export interface Database {
             profiles: {
                 Row: {
                     id: string;
+                    email: string | null;
                     full_name: string | null;
                     avatar_url: string | null;
+                    role: "user" | "admin" | "dev" | "owner";
+                    status: "active" | "suspended" | "banned";
+                    status_reason: string | null;
+                    status_changed_by: string | null;
+                    status_changed_at: string | null;
+                    role_assigned_by: string | null;
+                    role_assigned_at: string | null;
+                    credits: number;
+                    last_login_at: string | null;
+                    last_login_ip: string | null;
                     created_at: string;
                 };
                 Insert: {
                     id: string;
+                    email?: string | null;
                     full_name?: string | null;
                     avatar_url?: string | null;
+                    role?: "user" | "admin" | "dev" | "owner";
+                    status?: "active" | "suspended" | "banned";
+                    status_reason?: string | null;
+                    status_changed_by?: string | null;
+                    status_changed_at?: string | null;
+                    role_assigned_by?: string | null;
+                    role_assigned_at?: string | null;
+                    credits?: number;
+                    last_login_at?: string | null;
+                    last_login_ip?: string | null;
                     created_at?: string;
                 };
                 Update: {
                     id?: string;
+                    email?: string | null;
                     full_name?: string | null;
                     avatar_url?: string | null;
+                    role?: "user" | "admin" | "dev" | "owner";
+                    status?: "active" | "suspended" | "banned";
+                    status_reason?: string | null;
+                    status_changed_by?: string | null;
+                    status_changed_at?: string | null;
+                    role_assigned_by?: string | null;
+                    role_assigned_at?: string | null;
+                    credits?: number;
+                    last_login_at?: string | null;
+                    last_login_ip?: string | null;
                     created_at?: string;
                 };
             };

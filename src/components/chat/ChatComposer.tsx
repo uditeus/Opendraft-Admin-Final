@@ -155,6 +155,7 @@ export function ChatComposer({
   isGenerating: isGeneratingProp,
   attachments,
   onRemoveAttachment,
+  playbookContext,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -176,12 +177,16 @@ export function ChatComposer({
     Icon: React.ComponentType<{ className?: string }>;
     onClear: () => void;
   };
+  playbookContext?: null | {
+    label: string;
+    onClear: () => void;
+  };
   onAttach?: (files: File[]) => void;
   selectedStyle?: string | null;
   onSelectStyle?: (style: string | null) => void;
   activePill?: string | null;
   onSelectPill?: (pill: string | null) => void;
-  activationOrder?: ("style" | "pill")[];
+  activationOrder?: ("style" | "pill" | "playbook" | "agent")[];
   questionnaire?: QuestionnaireData | null;
   onQuestionnaireComplete?: (answers: Record<string, string[]>) => void;
   onQuestionnaireCancel?: () => void;
@@ -494,7 +499,7 @@ export function ChatComposer({
             className="gap-3 rounded-xl px-3 py-1.5 text-[13px] data-[highlighted]:bg-[hsl(var(--chat-hover))] data-[highlighted]:text-foreground"
             onSelect={() => onSelectAgent?.("plan")}
           >
-            <AppIcon name="Saturn01Icon" className="h-5 w-5 opacity-80" />
+            <AppIcon name="PlanMode" className="h-5 w-5 opacity-80" />
             <span>{tt("Plano", "Plan")}</span>
           </DropdownMenuItem>
           <DropdownMenuSub>
@@ -534,7 +539,7 @@ export function ChatComposer({
             className="gap-3 rounded-xl px-3 py-1.5 text-[13px] data-[highlighted]:bg-[hsl(var(--chat-hover))] data-[highlighted]:text-foreground"
             onClick={() => navigate("/playbooks")}
           >
-            <AppIcon name="Gitbook" className="h-5 w-5 opacity-80" />
+            <AppIcon name="Puzzle" className="h-5 w-5 opacity-80" />
             <span>{tt("Explorar playbooks", "Explore playbooks")}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -595,10 +600,10 @@ export function ChatComposer({
     );
   };
 
-  const renderPlanIndicator = () => {
-    if (selectedAgent !== "plan") return null;
+  const renderAgentIndicator = () => {
+    if (!activeAgent) return null;
     return (
-      <ChatTooltip label={tt("Modo Plano", "Plan Mode")}>
+      <ChatTooltip label={activeAgent.label}>
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -612,9 +617,41 @@ export function ChatComposer({
               "group flex h-9 w-9 items-center justify-center transition-colors",
               "text-[#0066ff] hover:bg-[#0066ff]/10 rounded-full"
             )}
-            aria-label="Remover modo plano"
+            aria-label={`Remover ${activeAgent.label}`}
           >
-            <AppIcon name="Saturn01Icon" className="h-5 w-5" />
+            <AppIcon name={
+              activeAgent.id === "write" ? "QuillWrite" :
+                activeAgent.id === "explore" ? "BrainIcon" :
+                  activeAgent.id === "plan" ? "PlanMode" :
+                    "Table2"
+            } className="h-5 w-5" />
+          </button>
+        </motion.div>
+      </ChatTooltip>
+    );
+  };
+
+  const renderPlaybookIndicator = () => {
+    if (!playbookContext) return null;
+    const { label, onClear } = playbookContext;
+    return (
+      <ChatTooltip label={label}>
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.8, opacity: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        >
+          <button
+            type="button"
+            onClick={onClear}
+            className={cn(
+              "group flex h-9 w-9 items-center justify-center transition-colors",
+              "text-[#0066ff] hover:bg-[#0066ff]/10 rounded-full"
+            )}
+            aria-label={label}
+          >
+            <AppIcon name="Puzzle" className="h-5 w-5" />
           </button>
         </motion.div>
       </ChatTooltip>
@@ -627,6 +664,8 @@ export function ChatComposer({
         <>
           {renderStyleIndicator()}
           {renderPillIndicator()}
+          {renderPlaybookIndicator()}
+          {renderAgentIndicator()}
         </>
       );
     }
@@ -634,6 +673,8 @@ export function ChatComposer({
     return activationOrder.map((type) => {
       if (type === "style") return <React.Fragment key="style">{renderStyleIndicator()}</React.Fragment>;
       if (type === "pill") return <React.Fragment key="pill">{renderPillIndicator()}</React.Fragment>;
+      if (type === "playbook") return <React.Fragment key="playbook">{renderPlaybookIndicator()}</React.Fragment>;
+      if (type === "agent") return <React.Fragment key="agent">{renderAgentIndicator()}</React.Fragment>;
       return null;
     });
   };
@@ -764,7 +805,7 @@ export function ChatComposer({
 
             <div
               className={cn(
-                "rounded-[26px] border border-border bg-[hsl(var(--chat-composer))] shadow-elev-1",
+                "rounded-[26px] border border-border dark:border-none bg-[hsl(var(--chat-composer))] shadow-elev-1",
                 "min-h-[132px] w-full flex flex-col",
               )}
             >
@@ -810,30 +851,6 @@ export function ChatComposer({
                     <div className={cn("flex items-center gap-1", HERO_ICON_SVG_CLASS)}>
                       {renderPlusMenu(HERO_ICON_BUTTON_CLASS)}
                       {renderIndicators()}
-                      {renderPlanIndicator()}
-
-                      {activeAgent && activeAgent.id !== "plan" && (
-                        <button
-                          type="button"
-                          onClick={() => onSelectAgent?.(null)}
-                          className={cn(
-                            "group inline-flex items-center gap-2 rounded-full px-2 py-1 text-[13px] font-medium",
-                            "text-ring",
-                            "hover:bg-[hsl(var(--chat-hover))]",
-                          )}
-                          aria-label={tt("Fechar agente", "Close agent") + `: ${activeAgent.label}`}
-                        >
-                          <span className="relative h-4 w-4">
-                            <AppIcon name={
-                              activeAgent.id === "write" ? "QuillWrite" :
-                                activeAgent.id === "explore" ? "BrainIcon" :
-                                  "Table2"
-                            } className="absolute inset-0 h-4 w-4 transition-opacity duration-150 group-hover:opacity-0" />
-                            <AppIcon name="X" className="absolute inset-0 h-4 w-4 opacity-0 transition-opacity duration-150 group-hover:opacity-100" />
-                          </span>
-                          <span>{activeAgent.label}</span>
-                        </button>
-                      )}
                     </div>
 
                     <div className={cn("flex items-center gap-1", HERO_ICON_SVG_CLASS)}>

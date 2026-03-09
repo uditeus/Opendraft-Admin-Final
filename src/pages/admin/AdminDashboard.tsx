@@ -1,95 +1,129 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { AppIcon } from "@/components/icons/AppIcon";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
-import { DASHBOARD_CHART_DATA as CHART_DATA, RECENT_ACTIVITY, ACTIVITY_TYPE_CONFIG as TYPE_ICON } from "@/lib/admin-mock";
+const MOCK_RESULTS = [
+    { id: "1", type: "top", title: "Matheus Aguiar", subtitle: "Administrador • Logado há 5 min", shortcut: "U", path: "/admin/users/usr_1" },
+    { id: "2", type: "suggestion", title: "Receita mensal: Fevereiro", subtitle: "Crescimento de 12% vs janeiro", shortcut: "F", path: "/admin/financials" },
+    { id: "3", type: "suggestion", title: "Modelos de IA: Llama 3", subtitle: "Funcionando normalmente", shortcut: "C", path: "/admin/api-usage/models" },
+    { id: "4", type: "folder", title: "Logs de segurança", subtitle: "C:/system/logs/security", shortcut: "S", path: "/admin/logs" },
+    { id: "5", type: "folder", title: "Métricas de retenção", subtitle: "C:/stats/retention", shortcut: "R", path: "/admin/analytics/retention" },
+];
 
 export default function AdminDashboard() {
+    const navigate = useNavigate();
+    const [draft, setDraft] = React.useState("");
+    const [isFocused, setIsFocused] = React.useState(false);
+
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour >= 5 && hour < 12) return "Bom dia";
+        if (hour >= 12 && hour < 18) return "Boa tarde";
+        if (hour >= 18 && hour < 23) return "Boa noite";
+        return "Boa madrugada";
+    };
+
+    const headline = `${getGreeting()}, Opendraft`;
+
+    const filtered = draft.trim().length > 0
+        ? MOCK_RESULTS.filter(r => r.title.toLowerCase().includes(draft.toLowerCase()))
+        : [];
+
     return (
-        <div className="flex flex-col gap-10 max-w-4xl mx-auto pb-20">
-            {/* Spotlight Composer */}
-            <div className="flex flex-col items-center text-center mt-10 mb-8">
-                <h1 className="text-3xl font-serif font-semibold text-foreground tracking-tight mb-8">
-                    Como posso ajudar com o painel hoje?
-                </h1>
+        <div className="flex flex-col w-full h-full items-center pt-[15vh]">
+            <div className="w-full max-w-[720px] px-4 flex flex-col items-center">
+                <motion.h1
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-14 text-center text-[40px] font-normal tracking-tight text-foreground font-serif"
+                >
+                    {headline}
+                </motion.h1>
 
-                <div className="relative w-full max-w-2xl bg-background rounded-[24px] border border-border shadow-sm p-2 flex items-center focus-within:ring-2 focus-within:ring-[#0066fe]/20 focus-within:border-[#0066fe] transition-all">
-                    <button className="p-3 text-muted-foreground hover:text-foreground transition-colors absolute left-2">
-                        <AppIcon name="Plus" className="w-5 h-5" />
-                    </button>
-                    <input
-                        type="text"
-                        placeholder="Pesquisar usuários, gerar relatórios..."
-                        className="w-full bg-transparent border-none outline-none pl-12 pr-14 py-3 text-foreground font-medium placeholder:font-normal placeholder-muted-foreground/70"
-                    />
-                    <button className="absolute right-3 p-2 bg-foreground hover:bg-foreground/80 text-background rounded-full flex items-center justify-center transition-colors">
-                        <AppIcon name="ArrowUpIcon" className="w-5 h-5" />
-                    </button>
-                </div>
-            </div>
-
-            {/* Quick KPIs (Clean, flat) */}
-            <div className="flex flex-wrap items-center justify-between gap-6 px-1 border-b border-border/30 pb-8">
-                {[
-                    { label: "Total Usuários", value: "1.247", highlight: true },
-                    { label: "MRR Diário", value: "R$ 495" },
-                    { label: "Tickets Abertos", value: "12" },
-                    { label: "Novos Hoje", value: "42" },
-                ].map((kpi, i) => (
-                    <div key={i} className="flex flex-col">
-                        <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">{kpi.label}</span>
-                        <div className="mt-1 flex items-baseline gap-2">
-                            <span className={cn("text-3xl font-semibold tracking-tight", kpi.highlight ? "text-[#0066fe]" : "text-foreground")}>
-                                {kpi.value}
-                            </span>
+                <div className="w-full relative">
+                    <div className={cn(
+                        "flex flex-col w-full bg-[hsl(var(--chat-composer))] animate-in fade-in duration-300 rounded-[26px] overflow-hidden transition-all shadow-elev-2 border border-border",
+                        "dark:border-border/10",
+                        isFocused ? "border-foreground/20 dark:border-border/20" : ""
+                    )}>
+                        <div className="flex items-center h-[52px] px-6">
+                            <div className="mr-4 text-muted-foreground/40 shrink-0">
+                                <AppIcon name="Search" className="h-[18px] w-[18px]" strokeWidth={2.5} />
+                            </div>
+                            <input
+                                type="text"
+                                value={draft}
+                                onChange={(e) => setDraft(e.target.value)}
+                                onFocus={() => setIsFocused(true)}
+                                onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+                                placeholder="Pesquisar..."
+                                className="flex-1 bg-transparent text-[16px] text-foreground placeholder:text-muted-foreground/40 outline-none font-sans"
+                                autoFocus
+                            />
                         </div>
-                    </div>
-                ))}
-            </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Main Chart */}
-                <div className="lg:col-span-2">
-                    <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-xs font-semibold text-foreground uppercase tracking-widest">Receita & Crescimento</h3>
-                        <button className="text-xs font-medium text-[#0066fe] hover:underline">Ver detalhes</button>
-                    </div>
-                    <div className="h-[300px] w-full bg-background rounded-2xl border border-border/50 p-4">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={CHART_DATA}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" strokeOpacity={0.5} vertical={false} />
-                                <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} dy={10} />
-                                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} dx={-10} />
-                                <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 12, boxShadow: "0 4px 12px rgba(0,0,0,0.1)", fontSize: 12 }} />
-                                {/* Blue accent for the chart */}
-                                <Area type="monotone" dataKey="users" stroke="#0066fe" fill="#0066fe" fillOpacity={0.05} strokeWidth={2} />
-                            </AreaChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
+                        <AnimatePresence>
+                            {draft.trim() && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+                                    className="border-t border-border/5 overflow-hidden"
+                                >
+                                    <div className="p-2 pt-1 pb-3">
+                                        {/* Best Match - Simplified */}
+                                        {filtered.filter(r => r.type === "top").map(res => (
+                                            <div
+                                                key={res.id}
+                                                onClick={() => navigate(res.path || "/admin")}
+                                                className="mx-1 p-3.5 bg-foreground/[0.03] border border-border/10 rounded-xl flex items-center gap-4 transition-colors hover:bg-foreground/[0.05] cursor-pointer"
+                                            >
+                                                <div className="h-9 w-9 flex items-center justify-center bg-muted/60 rounded-lg text-muted-foreground/60 text-[13px]">
+                                                    {res.shortcut}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <div className="text-[14.5px] font-medium text-foreground leading-tight">{res.title}</div>
+                                                    <div className="text-[12px] text-muted-foreground/50 mt-1">{res.subtitle}</div>
+                                                </div>
+                                            </div>
+                                        ))}
 
-                {/* Activity Feed (Simplified) */}
-                <div className="flex flex-col">
-                    <h3 className="text-xs font-semibold text-foreground uppercase tracking-widest mb-6">Feed Ao Vivo</h3>
-                    <div className="space-y-4">
-                        {RECENT_ACTIVITY.slice(0, 5).map((a, i) => {
-                            const { icon } = TYPE_ICON[a.type] ?? TYPE_ICON.signup;
-                            return (
-                                <div key={i} className="flex items-start gap-4 p-3 rounded-2xl hover:bg-muted/10 transition-colors cursor-default border border-transparent hover:border-border/30">
-                                    <div className="mt-1.5 shrink-0">
-                                        <AppIcon name={icon as any} className="w-4 h-4 text-muted-foreground" />
-                                    </div>
-                                    <div className="min-w-0">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm font-semibold text-foreground">{a.user}</span>
-                                            <span className="text-[11px] text-muted-foreground">{a.time}</span>
+                                        <div className="px-5 pt-4 pb-2 text-[11px] font-medium text-muted-foreground/50 tracking-tight">
+                                            Sugestões
                                         </div>
-                                        <p className="text-sm text-muted-foreground truncate">{a.detail}</p>
+                                        {filtered.filter(r => r.type === "suggestion").map(res => (
+                                            <div
+                                                key={res.id}
+                                                onClick={() => navigate(res.path || "/admin")}
+                                                className="mx-1 px-5 py-2.5 rounded-lg flex items-center transition-colors hover:bg-foreground/[0.03] cursor-pointer group"
+                                            >
+                                                <div className="flex-1 text-[14px] text-foreground/60 group-hover:text-foreground/90 transition-colors">
+                                                    {res.title} <span className="text-muted-foreground/40 ml-2">— {res.subtitle}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        <div className="px-5 pt-4 pb-2 text-[11px] font-medium text-muted-foreground/50 border-t border-border/5 mt-2 tracking-tight">
+                                            Módulos
+                                        </div>
+                                        {filtered.filter(r => r.type === "folder").map(res => (
+                                            <div
+                                                key={res.id}
+                                                onClick={() => navigate(res.path || "/admin")}
+                                                className="mx-1 px-5 py-2.5 rounded-lg flex flex-col transition-colors hover:bg-foreground/[0.03] cursor-pointer group"
+                                            >
+                                                <div className="text-[14px] text-foreground/60 group-hover:text-foreground/90 transition-colors">{res.title}</div>
+                                                <div className="text-[11px] text-muted-foreground/30">{res.subtitle}</div>
+                                            </div>
+                                        ))}
                                     </div>
-                                </div>
-                            );
-                        })}
+
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 </div>
             </div>
