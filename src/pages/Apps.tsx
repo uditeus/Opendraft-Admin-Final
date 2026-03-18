@@ -47,7 +47,7 @@ export default function AppsPage() {
       <header className="flex flex-col gap-6">
         <div className="flex items-start justify-between gap-6">
           <div>
-            <h1 className="text-2xl font-semibold font-serif">{tt("Playbooks", "Playbooks")}</h1>
+            <h1 className="text-2xl font-semibold">{tt("Playbooks", "Playbooks")}</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               {tt(
                 "Explore playbooks prontos e use como ponto de partida para criar a sua.",

@@ -225,7 +225,8 @@ export function ChatStoreProvider({ children }: { children: React.ReactNode }) {
               id: p.id,
               title: p.title,
               messages: existing?.messages ?? [],
-              messagesLoaded: existing?.messagesLoaded ?? false,
+              // If it's already loaded OR currently loading, keep it as true/current
+              messagesLoaded: existing?.messagesLoaded || false,
               favorite: p.is_favorite,
               updatedAt: p.updated_at,
             };
@@ -353,19 +354,17 @@ export function ChatStoreProvider({ children }: { children: React.ReactNode }) {
         const index = prev.findIndex(t => t.id === threadId);
 
         if (index === -1) {
-          if (project) {
-            const p = project as any;
-            const newThread: ChatThread = {
-              id: p.id,
-              title: p.title,
-              messages: [],
-              messagesLoaded: true,
-              favorite: p.is_favorite
-            };
-            currentThreads = [newThread, ...prev];
-          } else {
-            return prev;
-          }
+          // If not in local state, add it now. 
+          // Even if project fetch failed (null), we want to show a shell so UI doesn't hang.
+          const p = project as any;
+          const newThread: ChatThread = {
+            id: threadId,
+            title: p?.title || "Nova conversa",
+            messages: [],
+            messagesLoaded: true, // Mark as loaded so UI shows the empty state or allows interaction
+            favorite: p?.is_favorite || false
+          };
+          currentThreads = [newThread, ...prev];
         }
 
         const loadedMessages = (messages as any[]).map(m => ({
@@ -403,9 +402,17 @@ export function ChatStoreProvider({ children }: { children: React.ReactNode }) {
             return { ...t, messagesLoaded: true };
           }
 
+          // Merge local temp messages that might not be in the DB yet
+          const merged: any[] = [...loadedMessages];
+          const tempMessages = t.messages.filter(m => m.id.startsWith('temp-'));
+          tempMessages.forEach(temp => {
+            const alreadyExists = merged.some(m => m.role === temp.role && m.content === temp.content);
+            if (!alreadyExists) merged.push(temp);
+          });
+
           return {
             ...t,
-            messages: loadedMessages,
+            messages: merged,
             messagesLoaded: true
           };
         });
@@ -623,78 +630,8 @@ export function ChatStoreProvider({ children }: { children: React.ReactNode }) {
             }));
           }
 
-          // The Edge Function saves both messages server-side.
-          // Handle DOCX generation if it was a copy request
-          if (isCopy) {
-            try {
-              setThreads(prev => prev.map(t => t.id === actualThreadId ? {
-                ...t,
-                messages: t.messages.map(m => m.id === assistantMsgId ? {
-                  ...m,
-                  metadata: {
-                    ...m.metadata,
-                    taskSteps: (m.metadata?.taskSteps || []).map((s: any) =>
-                      s.id === "content" ? { ...s, status: "done" } : s
-                    ).concat([{ id: "gen_file", label: "Gerando arquivo DOCX", status: "running" }])
-                  }
-                } : m)
-              } : t));
-
-              const docTitle = extractDocumentTitle(fullText);
-              const docData = await generateDocx({
-                title: docTitle,
-                content: fullText,
-                projectId: actualThreadId,
-              });
-
-              // Finalize steps and add document
-              setThreads(prev => prev.map(t => t.id === actualThreadId ? {
-                ...t,
-                messages: t.messages.map(m => m.id === assistantMsgId ? {
-                  ...m,
-                  metadata: {
-                    ...m.metadata,
-                    document: docData,
-                    taskSteps: (m.metadata?.taskSteps || []).map((s: any) => ({
-                      ...s,
-                      status: s.id === "gen_file" || s.id === "content" ? "done" : s.status
-                    })).concat([
-                      { id: "completed", label: "Documento pronto", status: "done" }
-                    ])
-                  }
-                } : m)
-              } : t));
-
-              // Save the assistant message with the document metadata to DB
-              const { appendMessage: dbAppend } = await import("@/lib/supabase/api");
-              await dbAppend(actualThreadId, user.id, "assistant", fullText, {
-                thoughtTimeMs: thoughtTimeMsForDb,
-                mode,
-                document: docData,
-                taskSteps: [
-                  { id: "analyze", label: "Analisando solicitação", status: "done" },
-                  { id: "content", label: "Redigindo conteúdo", status: "done" },
-                  { id: "gen_file", label: "Arquivo DOCX gerado", status: "done" },
-                  { id: "completed", label: "Concluído", status: "done" }
-                ]
-              });
-            } catch (docxErr) {
-              console.error("DOCX auto-generation failed:", docxErr);
-              // Mark error in steps
-              setThreads(prev => prev.map(t => t.id === actualThreadId ? {
-                ...t,
-                messages: t.messages.map(m => m.id === assistantMsgId ? {
-                  ...m,
-                  metadata: {
-                    ...m.metadata,
-                    taskSteps: (m.metadata?.taskSteps || []).map((s: any) =>
-                      s.status === "running" ? { ...s, status: "error" } : s
-                    )
-                  }
-                } : m)
-              } : t));
-            }
-          }
+          // DOCX generation is now handled entirely by the backend skills system
+          // the chat stream response will now correctly include the right document & taskSteps metadata
 
           // Wait a moment for the DB write to complete, then reload from DB
           try {

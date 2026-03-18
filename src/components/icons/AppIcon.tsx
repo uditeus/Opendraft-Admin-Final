@@ -63,6 +63,7 @@ import {
   PlayIcon,
   Presentation01Icon,
   PuzzleIcon,
+  Cards02Icon,
   RotateRight01Icon,
   Search01Icon,
   SidebarLeftIcon,
@@ -228,7 +229,8 @@ const ICON_MAP = {
   Paperclip: Attachment01Icon,
   Camera: Camera01Icon,
   Highlighter: HighlighterIcon,
-  Puzzle: PuzzleIcon,
+  Puzzle: Cards02Icon,
+  Cards02Icon: Cards02Icon,
 
   // user / settings
   User: UserIcon,

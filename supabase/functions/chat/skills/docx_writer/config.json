@@ -1,0 +1,9 @@
+{
+    "name": "docx_writer",
+    "description": "Specialized skill for creating DOCX documents from generated content.",
+    "max_input_tokens": 100000,
+    "max_output_tokens": 4000,
+    "use_rag": false,
+    "use_history": false,
+    "is_executor": true
+}

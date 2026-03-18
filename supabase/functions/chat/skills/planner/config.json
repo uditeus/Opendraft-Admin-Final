@@ -1,0 +1,8 @@
+{
+    "name": "planner",
+    "description": "Expert in strategic planning and content calendars.",
+    "max_input_tokens": 300000,
+    "max_output_tokens": 8000,
+    "use_rag": true,
+    "use_history": true
+}

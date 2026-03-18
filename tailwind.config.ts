@@ -38,9 +38,18 @@ export default {
           "monospace",
         ],
         serif: [
-          '"Lora"',
+          '"Canela Text"',
+          "ui-serif",
           "Georgia",
           '"Times New Roman"',
+          "serif",
+        ],
+        styrene: [
+          '"Canela Text"',
+          "sans-serif",
+        ],
+        averia: [
+          '"Canela Text"',
           "serif",
         ],
       },

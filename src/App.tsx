@@ -10,19 +10,18 @@ import { AuthGuard } from "@/components/auth/AuthGuard";
 import { useRadixScrollLockFix } from "@/hooks/use-radix-fix";
 
 import { ChatApp } from "@/components/chat/ChatApp";
-import Index from "./pages/Index";
-import NewPage from "./pages/New";
 import LibraryPage from "./pages/Library";
-import DraftsPage from "./pages/Drafts";
 import AppsPage from "./pages/Apps";
 import AppDetailsPage from "./pages/apps/AppDetailsPage";
 import ProjectsPage from "./pages/Projects";
-import WorkspacePage from "./pages/workspace/Workspace";
 import NotFound from "./pages/NotFound";
-import Login from "./pages/auth/Login";
 import Onboarding from "./pages/Onboarding";
 import PricingPage from "./pages/Pricing";
 import UpgradePage from "./pages/Upgrade";
+import PaginaTest from "./pages/PaginaTest";
+import LoginPage from "./pages/auth/LoginPage";
+import SignupPage from "./pages/auth/SignupPage";
+import ReferPage from "./pages/auth/ReferPage";
 
 import { ChatLayout } from "@/components/chat/ChatLayout";
 
@@ -76,9 +75,7 @@ const App = () => {
             <BrowserRouter>
               <Routes>
                 {/* Public routes */}
-                <Route path="/signup" element={<Login />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/" element={<Index />} />
+                <Route path="/" element={<PaginaTest />} />
 
                 {/* Onboarding */}
                 <Route path="/onboarding" element={<Onboarding />} />
@@ -212,6 +209,10 @@ const App = () => {
                 />
 
                 <Route path="/pricing" element={<PricingPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+                <Route path="/refer" element={<ReferPage />} />
+                <Route path="/refeer" element={<ReferPage />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </BrowserRouter>

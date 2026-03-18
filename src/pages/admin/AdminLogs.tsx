@@ -55,7 +55,7 @@ export default function AdminLogs() {
         <div className="flex flex-col w-full h-full pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 mt-8">
                 <div>
-                    <h1 className="text-[42px] font-serif font-normal text-foreground tracking-tight leading-tight">Audit Logs</h1>
+                    <h1 className="text-[42px]  font-normal text-foreground tracking-tight leading-tight">Audit Logs</h1>
                     <p className="text-[15px] text-muted-foreground mt-3 font-normal">Registro completo e imutável de todas as ações administrativas realizadas no sistema.</p>
                 </div>
             </div>

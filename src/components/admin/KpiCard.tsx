@@ -19,7 +19,7 @@ export function KpiCard({ label, value, icon, variation, variationLabel }: KpiCa
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{label}</span>
                 {icon && <div className="text-muted-foreground/30 scale-75">{icon}</div>}
             </div>
-            <span className="text-4xl font-serif font-normal text-foreground tracking-tight">{value}</span>
+            <span className="text-4xl  font-normal text-foreground tracking-tight">{value}</span>
             {variation !== undefined && (
                 <div className="flex items-center gap-1.5 mt-2">
                     <span

@@ -7,7 +7,7 @@ export default function AdminAiModels() {
         <div className="flex flex-col w-full h-full pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 mt-8">
                 <div>
-                    <h1 className="text-4xl font-serif font-normal text-foreground tracking-tight">AI Models</h1>
+                    <h1 className="text-4xl  font-normal text-foreground tracking-tight">AI Models</h1>
                     <p className="text-sm text-muted-foreground mt-2">Performance e distribuição por modelo de IA.</p>
                 </div>
             </div>
@@ -31,7 +31,7 @@ export default function AdminAiModels() {
                 ].map((m) => (
                     <div key={m.name} className="flex flex-col">
                         <div className="flex items-center justify-between mb-6 pb-4 border-b border-border/10">
-                            <h4 className="font-serif text-xl font-normal text-foreground">{m.name}</h4>
+                            <h4 className=" text-xl font-normal text-foreground">{m.name}</h4>
                             <span className={cn(
                                 "h-2 w-2 rounded-full",
                                 m.status === "Healthy" ? "bg-emerald-500" : "bg-amber-500"
@@ -40,11 +40,11 @@ export default function AdminAiModels() {
                         <div className="space-y-4">
                             <div className="flex justify-between items-center">
                                 <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">Share</span>
-                                <span className="text-xl font-serif text-foreground/80">{m.usage}</span>
+                                <span className="text-xl  text-foreground/80">{m.usage}</span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">Latency</span>
-                                <span className="text-xl font-serif text-foreground/80">{m.latency}</span>
+                                <span className="text-xl  text-foreground/80">{m.latency}</span>
                             </div>
                         </div>
                     </div>

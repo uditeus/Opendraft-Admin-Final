@@ -13,7 +13,7 @@ export default function AdminFinancials() {
         <div className="flex flex-col w-full h-full pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 mt-8">
                 <div>
-                    <h1 className="text-[42px] font-serif font-normal text-foreground tracking-tight leading-tight">Revenue</h1>
+                    <h1 className="text-[42px]  font-normal text-foreground tracking-tight leading-tight">Revenue</h1>
                     <p className="text-[15px] text-muted-foreground mt-3 font-normal">Acompanhamento detalhado de MRR, Churn e métricas de crescimento.</p>
                 </div>
             </div>
@@ -29,7 +29,7 @@ export default function AdminFinancials() {
                     <div key={kpi.label} className="flex flex-col">
                         <span className="text-[11px] font-medium text-muted-foreground/40 uppercase tracking-widest mb-4">{kpi.label}</span>
                         <div className="flex items-baseline gap-3">
-                            <p className="text-[38px] font-normal text-foreground tracking-tight font-serif">{kpi.value}</p>
+                            <p className="text-[38px] font-normal text-foreground tracking-tight ">{kpi.value}</p>
                             <span className={cn("text-[12px] font-medium transition-colors",
                                 kpi.trend.startsWith("+") || kpi.trend === "Estável" ? "text-emerald-500" : "text-amber-500"
                             )}>
@@ -43,7 +43,7 @@ export default function AdminFinancials() {
             {/* Main Chart - Enhanced */}
             <div className="w-full mb-24">
                 <div className="flex items-center justify-between mb-10">
-                    <h3 className="text-[22px] font-serif text-foreground/90 tracking-tight text-center">Evolução Mensal de Receita</h3>
+                    <h3 className="text-[22px]  text-foreground/90 tracking-tight text-center">Evolução Mensal de Receita</h3>
                     <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-muted/10 border border-border/5 text-[12px] text-muted-foreground font-medium">
                         30 dias <AppIcon name="ChevronDown" className="h-3 w-3 opacity-40 ml-1" />
                     </div>
@@ -99,7 +99,7 @@ export default function AdminFinancials() {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-20">
                 {/* Plans Breakdown - 3 cols */}
                 <div className="lg:col-span-3">
-                    <h3 className="text-[20px] font-serif text-foreground/90 mb-10 tracking-tight">Receita por Plano</h3>
+                    <h3 className="text-[20px]  text-foreground/90 mb-10 tracking-tight">Receita por Plano</h3>
                     <div className="overflow-x-auto -mx-2">
                         <table className="w-full border-separate border-spacing-0">
                             <thead>
@@ -131,7 +131,7 @@ export default function AdminFinancials() {
                 {/* Atividade Financeira Recente - 2 cols */}
                 <div className="lg:col-span-2">
                     <div className="flex justify-between items-center mb-10">
-                        <h3 className="text-[20px] font-serif text-foreground/90 tracking-tight">Atividade Recente</h3>
+                        <h3 className="text-[20px]  text-foreground/90 tracking-tight">Atividade Recente</h3>
                         <AppIcon name="RefreshCw" className="h-[18px] w-[18px] text-muted-foreground/30 hover:text-foreground/50 transition-colors cursor-pointer" />
                     </div>
                     <div className="space-y-8">

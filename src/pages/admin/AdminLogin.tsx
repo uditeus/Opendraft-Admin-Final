@@ -33,14 +33,14 @@ export default function AdminLogin() {
                         <AppIcon name="Settings" className="h-6 w-6 text-background" />
                     </div>
                     <div className="flex flex-col items-center">
-                        <span className="text-2xl font-serif tracking-tight">Opendraft</span>
+                        <span className="text-2xl  tracking-tight">Opendraft</span>
                         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">Admin Panel</span>
                     </div>
                 </div>
 
                 {/* Cardless Login Form */}
                 <div className="flex flex-col">
-                    <h1 className="text-2xl font-serif text-foreground mb-4">Verificar identidade</h1>
+                    <h1 className="text-2xl  text-foreground mb-4">Verificar identidade</h1>
                     <p className="text-sm text-muted-foreground mb-12 leading-relaxed">
                         Para acessar o painel administrativo, confirme sua senha de acesso.
                     </p>
@@ -62,7 +62,7 @@ export default function AdminLogin() {
                                 autoFocus
                                 className={cn(
                                     "h-14 w-full bg-transparent border-b border-border/20 px-0",
-                                    "text-xl font-serif text-foreground placeholder:text-muted-foreground/20 outline-none",
+                                    "text-xl  text-foreground placeholder:text-muted-foreground/20 outline-none",
                                     "focus:border-foreground transition-all duration-300",
                                     "disabled:opacity-50",
                                 )}

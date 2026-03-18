@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 import { GLOBAL_IMAGE_URL } from "@/lib/constants";
 const defaultAvatar = GLOBAL_IMAGE_URL;
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useProfile } from "@/hooks/useProfile";
 import { toast } from "sonner";
 import { sounds } from "@/lib/audio/sounds";
 import { motion, AnimatePresence } from "framer-motion";
@@ -124,18 +125,24 @@ export function ChatApp() {
   } = useChatStore();
   const { tt } = useI18n();
   const { user } = useAuth();
+  const { plan } = useProfile();
+
+  const [typing, setTyping] = React.useState(false);
 
   React.useEffect(() => {
     if (id) {
       if (id !== activeThreadId) setActiveThreadId(id);
       const thread = threads.find(t => t.id === id);
       if (!thread || !thread.messagesLoaded) loadThreadData(id);
-    } else if (activeThreadId) {
-      if (window.location.pathname === "/new" || window.location.pathname === "/chat") {
+    } else {
+      // Se não há ID na URL (estamos em /new ou /chat), resetamos activeThreadId
+      // mas APENAS se não estivermos digitando (typing), para não quebrar o estado otimista
+      // de uma mensagem que acabou de ser enviada e está aguardando o redirect.
+      if (!typing && activeThreadId !== "") {
         setActiveThreadId("");
       }
     }
-  }, [id, activeThreadId, threads, setActiveThreadId, loadThreadData]);
+  }, [id, activeThreadId, threads, setActiveThreadId, loadThreadData, typing]);
 
   const effectiveId = id || activeThreadId;
   const activeThread = threads.find(t => t.id === effectiveId);
@@ -146,7 +153,6 @@ export function ChatApp() {
   const [renameDialogOpen, setRenameDialogOpen] = React.useState(false);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [draft, setDraft] = React.useState("");
-  const [typing, setTyping] = React.useState(false);
   const [selectedAgent, setSelectedAgent] = React.useState<null | "write" | "explore" | "plan" | "analyze">(null);
   const [selectedStyle, setSelectedStyle] = React.useState<string | null>(null);
   const [questionnaire, setQuestionnaire] = React.useState<QuestionnaireData | null>(null);
@@ -330,21 +336,23 @@ export function ChatApp() {
             <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-4">
               <div className="pointer-events-auto relative w-full max-w-[760px]">
                 {/* Plan Status Pill */}
-                <div
-                  onClick={() => navigate("/upgrade")}
-                  className="mb-8 flex items-center gap-2 rounded-[10px] bg-black/[0.03] dark:bg-white/[0.03] px-4 py-1.5 text-sm cursor-pointer w-fit mx-auto"
-                >
-                  <span className="text-zinc-400 dark:text-zinc-500">plano Gratuito</span>
-                  <span className="text-zinc-300 dark:text-zinc-700">•</span>
-                  <span className="text-zinc-500 dark:text-zinc-400 font-medium underline underline-offset-4 decoration-zinc-300/50 dark:decoration-zinc-700/50">Fazer Upgrade</span>
-                </div>
+                {plan === 'free' && (
+                  <div
+                    onClick={() => navigate("/upgrade")}
+                    className="mb-8 flex items-center gap-2 rounded-[10px] bg-black/[0.03] dark:bg-white/[0.03] px-4 py-1.5 text-sm cursor-pointer w-fit mx-auto"
+                  >
+                    <span className="text-zinc-400 dark:text-zinc-500">plano Gratuito</span>
+                    <span className="text-zinc-300 dark:text-zinc-700">•</span>
+                    <span className="text-zinc-500 dark:text-zinc-400 font-medium underline underline-offset-4 decoration-zinc-300/50 dark:decoration-zinc-700/50">Fazer Upgrade</span>
+                  </div>
+                )}
 
                 <motion.h1
                   key={hourlyHeadline || "O que vamos construir hoje?"}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1, duration: 0.5 }}
-                  className="mb-8 text-center text-[40px] font-normal leading-[1.1] tracking-[0.01em] text-foreground font-serif"
+                  className="mb-8 text-center text-[40px] font-normal leading-[1.1] tracking-[0.01em] text-foreground"
                 >
                   {hourlyHeadline || "O que vamos construir hoje?"}
                 </motion.h1>

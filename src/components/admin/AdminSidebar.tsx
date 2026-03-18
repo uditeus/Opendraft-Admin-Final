@@ -28,6 +28,7 @@ const adminItems: AdminNavItem[] = [
     { id: "analytics", label: "Analytics", path: "/admin/growth", Icon: createAppIcon("ChartBarIcon") },
     { id: "ai", label: "Usage", path: "/admin/api-usage", Icon: createAppIcon("UsageAdmin") },
     { id: "developer", label: "Developer", path: "/admin/settings", Icon: createAppIcon("TerminalAdmin"), requiresRole: "dev" },
+    { id: "onboarding", label: "Onboarding", path: "/onboarding?mode=preview", Icon: createAppIcon("CircleHelp") },
     { id: "system", label: "System", path: "/admin/logs", Icon: createAppIcon("ServerAdmin") },
 ];
 
@@ -52,6 +53,7 @@ export function AdminSidebar({
         if (item.id === "analytics") return location.pathname.includes("/growth") || location.pathname.includes("/product") || location.pathname.includes("/retention");
         if (item.id === "ai") return location.pathname.includes("/api-usage");
         if (item.id === "developer") return location.pathname.includes("/settings");
+        if (item.id === "onboarding") return location.pathname === "/onboarding";
         if (item.id === "system") return location.pathname.includes("/logs");
         return false;
     };
@@ -126,8 +128,13 @@ export function AdminSidebar({
         <aside className="flex h-full flex-col">
             <div className="pt-2 pb-1 px-3">
                 <div className="group flex items-center justify-between gap-2">
-                    <div className="flex min-w-0 flex-1 items-center px-3 py-2 text-sidebar-foreground">
-                        <span className="truncate text-lg font-semibold tracking-tight">Opendraft Console</span>
+                    <div className="flex min-w-0 flex-1 items-center px-3 py-2 gap-2.5 text-sidebar-foreground">
+                        <img
+                            src="https://i.imgur.com/wlz2FUz.png"
+                            alt="Opendraft Logo"
+                            className="h-[18px] w-auto brightness-0 dark:invert opacity-95"
+                        />
+                        <span className="truncate text-lg font-semibold tracking-tighter text-black dark:text-white">Console</span>
                     </div>
                     <ChatTooltip label="Trocar tema">
                         <button

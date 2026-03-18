@@ -58,7 +58,7 @@ export default function AdminMetrics() {
         <div className="flex flex-col w-full h-full pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 mt-8">
                 <div>
-                    <h1 className="text-[42px] font-serif font-normal text-foreground tracking-tight leading-tight">Analytics</h1>
+                    <h1 className="text-[42px]  font-normal text-foreground tracking-tight leading-tight">Analytics</h1>
                     <p className="text-[15px] text-muted-foreground mt-3 font-normal">Monitoramento central de crescimento, retenção e engajamento.</p>
                 </div>
                 <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
@@ -90,7 +90,7 @@ export default function AdminMetrics() {
                     <div key={kpi.label} className="flex flex-col">
                         <span className="text-[11px] font-medium text-muted-foreground/40 uppercase tracking-widest mb-4">{kpi.label}</span>
                         <div className="flex items-baseline gap-3">
-                            <p className="text-[38px] font-normal text-foreground tracking-tight font-serif">{kpi.value}</p>
+                            <p className="text-[38px] font-normal text-foreground tracking-tight ">{kpi.value}</p>
                             <span className={cn("text-[12px] font-medium transition-colors",
                                 kpi.variation > 0 ? "text-emerald-500" : "text-amber-500"
                             )}>
@@ -103,7 +103,7 @@ export default function AdminMetrics() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 mb-24">
                 <div className="flex flex-col">
-                    <h3 className="text-[20px] font-serif text-foreground/90 mb-10 tracking-tight">Crescimento de Base</h3>
+                    <h3 className="text-[20px]  text-foreground/90 mb-10 tracking-tight">Crescimento de Base</h3>
                     <div className="h-[300px] w-full -ml-4">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={GROWTH_DATA}>
@@ -143,7 +143,7 @@ export default function AdminMetrics() {
                 </div>
 
                 <div className="flex flex-col">
-                    <h3 className="text-[20px] font-serif text-foreground/90 mb-10 tracking-tight">Taxa de Churn (%)</h3>
+                    <h3 className="text-[20px]  text-foreground/90 mb-10 tracking-tight">Taxa de Churn (%)</h3>
                     <div className="h-[300px] w-full -ml-4">
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={CHURN_DATA}>
@@ -180,7 +180,7 @@ export default function AdminMetrics() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 mb-24">
                 <div className="flex flex-col">
-                    <h3 className="text-[20px] font-serif text-foreground/90 mb-10 tracking-tight">Copies Produzidas</h3>
+                    <h3 className="text-[20px]  text-foreground/90 mb-10 tracking-tight">Copies Produzidas</h3>
                     <div className="h-[300px] w-full -ml-4">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={ENGAGEMENT_DATA}>
@@ -214,7 +214,7 @@ export default function AdminMetrics() {
                 </div>
 
                 <div className="flex flex-col">
-                    <h3 className="text-[20px] font-serif text-foreground/90 mb-10 tracking-tight">Mix de Planos</h3>
+                    <h3 className="text-[20px]  text-foreground/90 mb-10 tracking-tight">Mix de Planos</h3>
                     <div className="h-[300px] w-full flex items-center justify-center -ml-10">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
@@ -253,7 +253,7 @@ export default function AdminMetrics() {
 
             <RoleGuard requires="dev">
                 <div className="pt-24 border-t border-border/5">
-                    <h3 className="text-[20px] font-serif text-foreground/90 mb-12 tracking-tight">System Health (Dev Only)</h3>
+                    <h3 className="text-[20px]  text-foreground/90 mb-12 tracking-tight">System Health (Dev Only)</h3>
                     <div className="grid grid-cols-2 lg:grid-cols-5 gap-16">
                         {[
                             { label: "Uptime (30d)", value: "99,97%" },
@@ -264,7 +264,7 @@ export default function AdminMetrics() {
                         ].map((stat) => (
                             <div key={stat.label} className="flex flex-col">
                                 <span className="text-[11px] font-medium text-muted-foreground/40 uppercase tracking-widest mb-4">{stat.label}</span>
-                                <span className="text-[24px] font-serif font-normal text-foreground/70">{stat.value}</span>
+                                <span className="text-[24px]  font-normal text-foreground/70">{stat.value}</span>
                             </div>
                         ))}
                     </div>

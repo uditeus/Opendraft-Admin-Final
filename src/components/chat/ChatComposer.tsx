@@ -12,7 +12,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
-import { useChatStore } from "@/components/chat/store"; // Added import
+import { useChatStore } from "@/components/chat/store";
 import { ComposerSurvey } from "./ComposerSurvey";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
@@ -156,6 +156,7 @@ export function ChatComposer({
   attachments,
   onRemoveAttachment,
   playbookContext,
+  isDark,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -177,10 +178,8 @@ export function ChatComposer({
     Icon: React.ComponentType<{ className?: string }>;
     onClear: () => void;
   };
-  playbookContext?: null | {
-    label: string;
-    onClear: () => void;
-  };
+  playbookContext?: { label: string; onClear: () => void } | null;
+  isDark?: boolean;
   onAttach?: (files: File[]) => void;
   selectedStyle?: string | null;
   onSelectStyle?: (style: string | null) => void;
@@ -205,13 +204,11 @@ export function ChatComposer({
   const taRef = React.useRef<HTMLTextAreaElement | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
-  const { activeSurvey, startSurvey, threads, stopGeneration } = useChatStore(); // Get activeSurvey state
-  const activeThread = threads.find(t => t.id === (navigate ? window.location.pathname.split('/').pop() : '')) || threads[0];
-  // More robust way to find active thread if navigate is used
+  const { activeSurvey, startSurvey, threads, stopGeneration } = useChatStore();
   const currentPath = window.location.pathname;
   const threadIdFromUrl = currentPath.startsWith('/chat/') ? currentPath.split('/')[2] : null;
   const thread = threads.find(t => t.id === threadIdFromUrl);
-  const isGenerating = isGeneratingProp ?? (uiVariant === "hero" ? false : thread?.isTyping);
+  const isGenerating = isGeneratingProp ?? thread?.isTyping;
 
 
   // If survey is open, we might want to hide the standard composer or just render the survey "over" it?
@@ -402,51 +399,54 @@ export function ChatComposer({
       <DropdownMenuTrigger asChild>
         <span aria-hidden className="pointer-events-none absolute top-[8px] h-9 w-9" style={{ left: anchorLeftPx }} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        side={dropdownSide}
-        align="start"
-        sideOffset={4}
-        alignOffset={COMMAND_MENU_ALIGN_OFFSET_PX}
-        className={cn(
-          "w-[248px]",
-          "rounded-2xl border border-border bg-[hsl(var(--chat-composer))] shadow-elev-1",
-          "p-1.5",
-        )}
-      >
-        {/* Keep the same overall height as '+' by matching item count + separators */}
-        <DropdownMenuItem className="gap-3 rounded-xl px-3 py-1.5 text-[13px] data-[highlighted]:bg-[hsl(var(--chat-hover))] data-[highlighted]:text-foreground">
-          <AppIcon name="Search" className="h-5 w-5 opacity-80" />
-          <span>{tt("Pesquisa de produtos", "Product research")}</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="my-0.5 h-px bg-border/40" />
+      <DropdownMenuPortal>
+        <DropdownMenuContent
+          side={dropdownSide}
+          align="start"
+          sideOffset={4}
+          alignOffset={COMMAND_MENU_ALIGN_OFFSET_PX}
+          className={cn(
+            "w-[248px] z-[100]",
+            "rounded-2xl border border-border bg-popover shadow-elev-1",
+            "p-1.5",
+            isDark && "dark",
+          )}
+        >
+          {/* Keep the same overall height as '+' by matching item count + separators */}
+          <DropdownMenuItem className="gap-3 rounded-xl px-3 py-1.5 text-[13px]">
+            <AppIcon name="Search" className="h-5 w-5 opacity-80" />
+            <span>{tt("Pesquisa de produtos", "Product research")}</span>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className="my-0.5 h-px bg-border/40" />
 
-        {atItems
-          .filter((i) => i.id !== "products")
-          .map((item) => (
-            <DropdownMenuItem
-              key={item.id}
-              className="flex items-center gap-3 rounded-xl px-3 py-1.5 text-[13px] data-[highlighted]:bg-[hsl(var(--chat-hover))] data-[highlighted]:text-foreground"
-              onSelect={() => {
-                setAtMenuOpen(false);
-                onChange(`@${item.label} `);
-              }}
-            >
-              <span
-                aria-hidden
-                className="grid h-4 w-4 place-items-center rounded-full bg-[hsl(var(--chat-active))] text-[10px] font-semibold text-foreground/80"
+          {atItems
+            .filter((i) => i.id !== "products")
+            .map((item) => (
+              <DropdownMenuItem
+                key={item.id}
+                className="flex items-center gap-3 rounded-xl px-3 py-1.5 text-[13px]"
+                onSelect={() => {
+                  setAtMenuOpen(false);
+                  onChange(`@${item.label} `);
+                }}
               >
-                {(item as { badge: string }).badge}
-              </span>
-              <span>{item.label}</span>
-            </DropdownMenuItem>
-          ))}
+                <span
+                  aria-hidden
+                  className="grid h-4 w-4 place-items-center rounded-full bg-[hsl(var(--chat-active))] text-[10px] font-semibold text-foreground/80"
+                >
+                  {(item as { badge: string }).badge}
+                </span>
+                <span>{item.label}</span>
+              </DropdownMenuItem>
+            ))}
 
-        <DropdownMenuItem className="gap-3 rounded-xl px-3 py-1.5 text-[13px] data-[highlighted]:bg-[hsl(var(--chat-hover))] data-[highlighted]:text-foreground">
-          <AppIcon name="MoreHorizontal" className="h-5 w-5 opacity-80" />
-          <span className="flex-1">{tt("Mais", "More")}</span>
-          <AppIcon name="ChevronRight" className="h-4 w-4 opacity-70" />
-        </DropdownMenuItem>
-      </DropdownMenuContent>
+          <DropdownMenuItem className="gap-3 rounded-xl px-3 py-1.5 text-[13px]">
+            <AppIcon name="MoreHorizontal" className="h-5 w-5 opacity-80" />
+            <span className="flex-1">{tt("Mais", "More")}</span>
+            <AppIcon name="ChevronRight" className="h-4 w-4 opacity-70" />
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenuPortal>
     </DropdownMenu>
   );
 
@@ -469,80 +469,86 @@ export function ChatComposer({
             </Button>
           </DropdownMenuTrigger>
         </ChatTooltip>
-        <DropdownMenuContent
-          side={dropdownSide}
-          align="start"
-          sideOffset={14}
-          alignOffset={-6}
-          className={cn(
-            "w-[248px]",
-            "rounded-2xl border border-border bg-[hsl(var(--chat-composer))] shadow-elev-1",
-            "p-1.5",
-          )}
-        >
-          <DropdownMenuItem
-            className="gap-3 rounded-xl px-3 py-1.5 text-[13px] data-[highlighted]:bg-[hsl(var(--chat-hover))] data-[highlighted]:text-foreground"
-            onClick={handleUploadClick}
+        <DropdownMenuPortal>
+          <DropdownMenuContent
+            side={dropdownSide}
+            align="start"
+            sideOffset={14}
+            alignOffset={-6}
+            className={cn(
+              "w-[248px] z-[100]",
+              "rounded-2xl border border-border bg-popover shadow-elev-1",
+              "p-1.5",
+              isDark && "dark",
+            )}
           >
-            <AppIcon name="Paperclip" className="h-5 w-5 opacity-80" />
-            <span>{tt("Adicionar arquivos ou fotos", "Add files or photos")}</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="gap-3 rounded-xl px-3 py-1.5 text-[13px] data-[highlighted]:bg-[hsl(var(--chat-hover))] data-[highlighted]:text-foreground"
-            onClick={handleScreenshotClick}
-          >
-            <AppIcon name="Camera" className="h-5 w-5 opacity-80" />
-            <span>{tt("Fazer captura de tela", "Take a screenshot")}</span>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator className="my-1 h-px bg-border/40" />
-          <DropdownMenuItem
-            className="gap-3 rounded-xl px-3 py-1.5 text-[13px] data-[highlighted]:bg-[hsl(var(--chat-hover))] data-[highlighted]:text-foreground"
-            onSelect={() => onSelectAgent?.("plan")}
-          >
-            <AppIcon name="PlanMode" className="h-5 w-5 opacity-80" />
-            <span>{tt("Plano", "Plan")}</span>
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="gap-3 rounded-xl px-3 py-1.5 text-[13px] data-[state=open]:bg-[hsl(var(--chat-hover))] data-[highlighted]:bg-[hsl(var(--chat-hover))] data-[highlighted]:text-foreground">
-              <AppIcon name="QuillWrite" className="h-5 w-5 opacity-80" />
-              <span className="flex-1">{tt("Usar estilo", "Use style")}</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent
-                className="w-[248px] max-h-[172px] overflow-y-auto no-scrollbar rounded-2xl border border-border bg-[hsl(var(--chat-composer))] p-1.5 shadow-elev-2"
-                sideOffset={8}
-                alignOffset={window.location.pathname.includes('/chat') ? -70 : -6}
-              >
-                {[
-                  "Normal", "Aprendizado", "Conciso", "Explicativo", "Formal", "Humanizado",
-                  "Scientific Persuader", "Joe Karbo", "Claude Hopkins", "David Ogilvy",
-                  "Victor Schwab", "John Caples", "Gary Halbert", "Eugene Schwartz",
-                  "Lilian Eichler", "Matty Furey", "Ben Settle", "Joseph Sugarman",
-                  "Victor O. Schwab", "Dan Kennedy", "Mel Martin", "John Carlton",
-                  "Bob Bly", "Doug Danna", "Clayton Makepeace", "Drayton Bird",
-                  "Gary Bencivenga", "Robert Collier", "Leo Burnett", "Brian Clark",
-                  "Gary Provost", "Jay Abraham", "Jim Rutz"
-                ].map((style) => (
-                  <DropdownMenuItem
-                    key={style}
-                    className="flex h-[32px] cursor-default select-none items-center gap-3 rounded-xl px-3 py-0 text-[13px] outline-none data-[highlighted]:bg-[hsl(var(--chat-hover))] data-[highlighted]:text-foreground"
-                    onSelect={() => onSelectStyle?.(style)}
-                  >
-                    <AppIcon name="QuillWrite" className="h-[18px] w-[18px] shrink-0 opacity-80" />
-                    <span className="truncate">{style}</span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-          <DropdownMenuItem
-            className="gap-3 rounded-xl px-3 py-1.5 text-[13px] data-[highlighted]:bg-[hsl(var(--chat-hover))] data-[highlighted]:text-foreground"
-            onClick={() => navigate("/playbooks")}
-          >
-            <AppIcon name="Puzzle" className="h-5 w-5 opacity-80" />
-            <span>{tt("Explorar playbooks", "Explore playbooks")}</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
+            <DropdownMenuItem
+              className="gap-3 rounded-xl px-3 py-1.5 text-[13px]"
+              onClick={handleUploadClick}
+            >
+              <AppIcon name="Paperclip" className="h-5 w-5 opacity-80" />
+              <span>{tt("Adicionar arquivos ou fotos", "Add files or photos")}</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="gap-3 rounded-xl px-3 py-1.5 text-[13px]"
+              onClick={handleScreenshotClick}
+            >
+              <AppIcon name="Camera" className="h-5 w-5 opacity-80" />
+              <span>{tt("Fazer captura de tela", "Take a screenshot")}</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="my-1 h-px bg-border/40" />
+            <DropdownMenuItem
+              className="gap-3 rounded-xl px-3 py-1.5 text-[13px]"
+              onSelect={() => onSelectAgent?.("plan")}
+            >
+              <AppIcon name="PlanMode" className="h-5 w-5 opacity-80" />
+              <span>{tt("Plano", "Plan")}</span>
+            </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="gap-3 rounded-xl px-3 py-1.5 text-[13px]">
+                <AppIcon name="QuillWrite" className="h-5 w-5 opacity-80" />
+                <span className="flex-1">{tt("Usar estilo", "Use style")}</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent
+                  className={cn(
+                    "w-[248px] max-h-[172px] overflow-y-auto no-scrollbar rounded-2xl border border-border bg-popover p-1.5 shadow-elev-2",
+                    isDark && "dark"
+                  )}
+                  sideOffset={8}
+                  alignOffset={window.location.pathname.includes('/chat') ? -70 : -6}
+                >
+                  {[
+                    "Normal", "Aprendizado", "Conciso", "Explicativo", "Formal", "Humanizado",
+                    "Scientific Persuader", "Joe Karbo", "Claude Hopkins", "David Ogilvy",
+                    "Victor Schwab", "John Caples", "Gary Halbert", "Eugene Schwartz",
+                    "Lilian Eichler", "Matty Furey", "Ben Settle", "Joseph Sugarman",
+                    "Victor O. Schwab", "Dan Kennedy", "Mel Martin", "John Carlton",
+                    "Bob Bly", "Doug Danna", "Clayton Makepeace", "Drayton Bird",
+                    "Gary Bencivenga", "Robert Collier", "Leo Burnett", "Brian Clark",
+                    "Gary Provost", "Jay Abraham", "Jim Rutz"
+                  ].map((style) => (
+                    <DropdownMenuItem
+                      key={style}
+                      className="flex h-[32px] cursor-default select-none items-center gap-3 rounded-xl px-3 py-0 text-[13px] outline-none"
+                      onSelect={() => onSelectStyle?.(style)}
+                    >
+                      <AppIcon name="QuillWrite" className="h-[18px] w-[18px] shrink-0 opacity-80" />
+                      <span className="truncate">{style}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+            <DropdownMenuItem
+              className="gap-3 rounded-xl px-3 py-1.5 text-[13px]"
+              onClick={() => navigate("/playbooks")}
+            >
+              <AppIcon name="Cards02Icon" className="h-5 w-5 opacity-80" />
+              <span>{tt("Explorar playbooks", "Explore playbooks")}</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
       </DropdownMenu>
     );
   };
@@ -651,7 +657,7 @@ export function ChatComposer({
             )}
             aria-label={label}
           >
-            <AppIcon name="Puzzle" className="h-5 w-5" />
+            <AppIcon name="Cards02Icon" className="h-5 w-5" />
           </button>
         </motion.div>
       </ChatTooltip>
@@ -836,6 +842,7 @@ export function ChatComposer({
                       "min-h-0",
                     )}
                     rows={1}
+                    disabled={disabled}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();

@@ -38,7 +38,7 @@ export default function AdminSubscriptions() {
         <div className="flex flex-col w-full h-full pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 mt-8">
                 <div>
-                    <h1 className="text-[42px] font-serif font-normal text-foreground tracking-tight leading-tight">Subscriptions</h1>
+                    <h1 className="text-[42px]  font-normal text-foreground tracking-tight leading-tight">Subscriptions</h1>
                     <p className="text-[15px] text-muted-foreground mt-3 font-normal">Gestão central de planos, ciclos de faturamento e retenção.</p>
                 </div>
             </div>
@@ -64,7 +64,7 @@ export default function AdminSubscriptions() {
                     <div key={kpi.label} className="flex flex-col">
                         <span className="text-[11px] font-medium text-muted-foreground/40 uppercase tracking-widest mb-4">{kpi.label}</span>
                         <div className="flex items-baseline gap-3">
-                            <p className="text-[38px] font-normal text-foreground tracking-tight font-serif">{kpi.value}</p>
+                            <p className="text-[38px] font-normal text-foreground tracking-tight ">{kpi.value}</p>
                             {kpi.trend && (
                                 <span className={cn("text-[12px] font-medium transition-colors",
                                     kpi.negative ? "text-red-400" : "text-emerald-500"
@@ -79,7 +79,7 @@ export default function AdminSubscriptions() {
 
             {/* Distribuição por plano - Modernized */}
             <div className="w-full mb-24 max-w-3xl">
-                <h3 className="text-[22px] font-serif text-foreground/90 mb-10 tracking-tight">Distribuição de Receita por Plano</h3>
+                <h3 className="text-[22px]  text-foreground/90 mb-10 tracking-tight">Distribuição de Receita por Plano</h3>
                 <div className="space-y-10">
                     {PLAN_DISTRIBUTION.map((p) => (
                         <div key={p.plan} className="flex flex-col gap-3 group">

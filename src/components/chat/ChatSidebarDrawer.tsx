@@ -45,7 +45,7 @@ type NavItem = {
 const items: NavItem[] = [
   { id: "new_draft", labelPt: "Novo draft", labelEn: "New draft", Icon: PencilEdit02Icon },
   { id: "library", labelPt: "Biblioteca", labelEn: "Library", Icon: LibrariesIcon },
-  { id: "playbooks", labelPt: "Playbooks", labelEn: "Playbooks", Icon: createAppIcon("Puzzle") },
+  { id: "playbooks", labelPt: "Playbooks", labelEn: "Playbooks", Icon: createAppIcon("Cards02Icon") },
 ];
 
 export function ChatSidebarDrawer({
@@ -246,14 +246,19 @@ export function ChatSidebarDrawer({
             </ChatTooltip>
           ) : (
             <>
-              {/* Expanded: Just text, no hover bg */}
+              {/* Expanded: Logo + Brand */}
               <div
                 className={cn(
-                  "flex min-w-0 flex-1 items-center px-3 py-2",
+                  "flex min-w-0 flex-1 items-center px-3 py-2 gap-2.5",
                   "text-sidebar-foreground",
                 )}
               >
-                <span className="truncate text-lg font-semibold tracking-tight">Opendraft</span>
+                <img
+                  src="https://i.imgur.com/wlz2FUz.png"
+                  alt="Opendraft Logo"
+                  className="h-[18px] w-auto brightness-0 dark:invert opacity-95"
+                />
+                <span className="truncate text-lg font-semibold tracking-tighter text-black dark:text-white">Opendraft</span>
               </div>
 
               {/* Close icon on right */}

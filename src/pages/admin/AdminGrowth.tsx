@@ -8,7 +8,7 @@ export default function AdminGrowth() {
         <div className="flex flex-col w-full h-full pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 mt-8">
                 <div>
-                    <h1 className="text-4xl font-serif font-normal text-foreground tracking-tight">Growth</h1>
+                    <h1 className="text-4xl  font-normal text-foreground tracking-tight">Growth</h1>
                     <p className="text-sm text-muted-foreground mt-2">Visitantes, signups, conversão e métricas de canais.</p>
                 </div>
             </div>
@@ -24,7 +24,7 @@ export default function AdminGrowth() {
                     <div key={kpi.label} className="flex flex-col">
                         <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest mb-2">{kpi.label}</span>
                         <div className="flex items-baseline gap-2">
-                            <p className="text-4xl font-normal text-foreground tracking-tight font-serif">{kpi.value}</p>
+                            <p className="text-4xl font-normal text-foreground tracking-tight ">{kpi.value}</p>
                             <span className={cn("text-xs font-semibold", kpi.change.startsWith("+") ? "text-emerald-500" : "text-emerald-500")}>
                                 {kpi.change}
                             </span>
@@ -35,7 +35,7 @@ export default function AdminGrowth() {
 
             {/* Funil Visual */}
             <div className="w-full mb-16">
-                <h3 className="text-xl font-serif text-foreground mb-8">Funil de Conversão do Produto</h3>
+                <h3 className="text-xl  text-foreground mb-8">Funil de Conversão do Produto</h3>
                 <div className="flex items-end gap-4 h-[200px] max-w-4xl pt-4">
                     {FUNNEL.map((step, i) => {
                         const maxVal = FUNNEL[0].value;
@@ -69,7 +69,7 @@ export default function AdminGrowth() {
                 {/* Traffic Analytics */}
                 <div className="w-full">
                     <div className="flex items-center justify-between mb-8">
-                        <h3 className="text-xl font-serif text-foreground">Tráfego & Analytics</h3>
+                        <h3 className="text-xl  text-foreground">Tráfego & Analytics</h3>
                         <div className="flex items-center gap-2">
                             <div className="h-2 w-2 rounded-full bg-emerald-500" />
                             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Live</span>
@@ -105,7 +105,7 @@ export default function AdminGrowth() {
 
                 {/* Efficiency by Channel */}
                 <div className="w-full">
-                    <h3 className="text-xl font-serif text-foreground mb-8">Eficiência (CAC/LTV)</h3>
+                    <h3 className="text-xl  text-foreground mb-8">Eficiência (CAC/LTV)</h3>
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>

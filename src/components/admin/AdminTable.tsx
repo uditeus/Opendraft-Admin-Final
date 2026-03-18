@@ -99,7 +99,7 @@ export function AdminTable<T extends Record<string, any>>({
                     <tbody className="divide-y divide-border/5">
                         {data.length === 0 ? (
                             <tr>
-                                <td colSpan={columns.length} className="px-4 py-32 text-center text-base text-muted-foreground italic font-serif opacity-30">
+                                <td colSpan={columns.length} className="px-4 py-32 text-center text-base text-muted-foreground italic  opacity-30">
                                     {emptyMessage}
                                 </td>
                             </tr>

@@ -30,7 +30,7 @@ export default function AdminEconomics() {
         <div className="flex flex-col w-full h-full pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 mt-8">
                 <div>
-                    <h1 className="text-4xl font-serif font-normal text-foreground tracking-tight">Unit Economics</h1>
+                    <h1 className="text-4xl  font-normal text-foreground tracking-tight">Unit Economics</h1>
                     <p className="text-sm text-muted-foreground mt-2">Sustentabilidade, margens e métricas de eficiência do SaaS.</p>
                 </div>
             </div>
@@ -55,7 +55,7 @@ export default function AdminEconomics() {
                 ].map((kpi) => (
                     <div key={kpi.label} className="flex flex-col">
                         <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest mb-2">{kpi.label}</span>
-                        <p className="text-4xl font-normal text-foreground tracking-tight font-serif">{kpi.value}</p>
+                        <p className="text-4xl font-normal text-foreground tracking-tight ">{kpi.value}</p>
                         <span className="text-[11px] text-muted-foreground mt-2 font-medium opacity-60 uppercase tracking-tighter">{kpi.sub}</span>
                     </div>
                 ))}
@@ -64,7 +64,7 @@ export default function AdminEconomics() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 mb-20">
                 {/* Margin trend chart */}
                 <div className="lg:col-span-2">
-                    <h3 className="text-xl font-serif text-foreground mb-8">Eficiência e Margem — 12 meses</h3>
+                    <h3 className="text-xl  text-foreground mb-8">Eficiência e Margem — 12 meses</h3>
                     <div className="h-[320px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={MARGIN_TREND}>
@@ -84,7 +84,7 @@ export default function AdminEconomics() {
 
                 {/* Per-plan summary */}
                 <div className="flex flex-col">
-                    <h3 className="text-xl font-serif text-foreground mb-8">Média por Assinante</h3>
+                    <h3 className="text-xl  text-foreground mb-8">Média por Assinante</h3>
                     <div className="space-y-6">
                         {[
                             { label: "ARPU Médio", value: "R$ 49", color: "text-foreground" },
@@ -94,7 +94,7 @@ export default function AdminEconomics() {
                         ].map((item) => (
                             <div key={item.label} className="flex items-center justify-between py-4 border-b border-border/10">
                                 <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">{item.label}</span>
-                                <span className={cn("text-xl font-serif tabular-nums", item.color)}>{item.value}</span>
+                                <span className={cn("text-xl  tabular-nums", item.color)}>{item.value}</span>
                             </div>
                         ))}
                     </div>
@@ -103,7 +103,7 @@ export default function AdminEconomics() {
 
             {/* Per-plan economics table */}
             <div className="w-full mb-20">
-                <h3 className="text-xl font-serif text-foreground mb-8">Economics Detalhado por Plano</h3>
+                <h3 className="text-xl  text-foreground mb-8">Economics Detalhado por Plano</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
@@ -138,7 +138,7 @@ export default function AdminEconomics() {
                 ].map((kpi) => (
                     <div key={kpi.label} className="flex flex-col">
                         <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest mb-2">{kpi.label}</span>
-                        <p className="text-4xl font-normal text-foreground tracking-tight font-serif">{kpi.value}</p>
+                        <p className="text-4xl font-normal text-foreground tracking-tight ">{kpi.value}</p>
                         <span className="text-[11px] text-muted-foreground mt-2 font-medium opacity-60 uppercase tracking-tighter">{kpi.sub}</span>
                     </div>
                 ))}

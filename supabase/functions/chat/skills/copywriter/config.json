@@ -1,0 +1,8 @@
+{
+    "name": "copywriter",
+    "description": "Expert in conversion copywriting and marketing strategies.",
+    "max_input_tokens": 300000,
+    "max_output_tokens": 8000,
+    "use_rag": true,
+    "use_history": true
+}

@@ -168,7 +168,7 @@ export default function ProjectsPage() {
       <header className="flex flex-col gap-6">
         <div className="flex items-start justify-between gap-6">
           <div>
-            <h1 className="text-2xl font-semibold font-serif">{tt("Biblioteca", "Library")}</h1>
+            <h1 className="text-2xl font-semibold">{tt("Biblioteca", "Library")}</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               {tt("Veja, encontre e organize seus chats.", "See, find, and organize your chats.")}
             </p>

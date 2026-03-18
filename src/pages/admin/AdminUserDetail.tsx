@@ -49,7 +49,7 @@ export default function AdminUserDetail() {
                     </button>
                     <div>
                         <div className="flex items-center gap-3 mb-1">
-                            <h1 className="text-[38px] font-serif font-normal text-foreground tracking-tight leading-tight">{u.name}</h1>
+                            <h1 className="text-[38px]  font-normal text-foreground tracking-tight leading-tight">{u.name}</h1>
                             <span className={cn(
                                 "px-2 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase",
                                 u.status === 'active' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'
@@ -140,7 +140,7 @@ export default function AdminUserDetail() {
                                     <div key={item.label} className="flex flex-col">
                                         <span className="text-[11px] font-medium text-muted-foreground/30 uppercase tracking-widest mb-4">{item.label}</span>
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-[28px] font-normal text-foreground/90 font-serif lowercase first-letter:uppercase tracking-tight leading-none">{item.value}</span>
+                                            <span className="text-[28px] font-normal text-foreground/90  lowercase first-letter:uppercase tracking-tight leading-none">{item.value}</span>
                                             <span className="text-[11px] text-muted-foreground/40 font-medium tabular-nums">{item.secondary}</span>
                                         </div>
                                     </div>
@@ -150,7 +150,7 @@ export default function AdminUserDetail() {
 
                         {activeTab === 1 && (
                             <div className="max-w-xl">
-                                <h3 className="text-[20px] font-serif text-foreground/90 mb-10 tracking-tight">Assinatura Atual</h3>
+                                <h3 className="text-[20px]  text-foreground/90 mb-10 tracking-tight">Assinatura Atual</h3>
                                 <div className="space-y-6">
                                     {[
                                         { label: "Plano", value: u.plan, icon: "Diamond" },
@@ -178,7 +178,7 @@ export default function AdminUserDetail() {
 
                         {activeTab === 2 && (
                             <div className="max-w-2xl">
-                                <h3 className="text-[20px] font-serif text-foreground/90 mb-10 tracking-tight">Timeline de Atividade</h3>
+                                <h3 className="text-[20px]  text-foreground/90 mb-10 tracking-tight">Timeline de Atividade</h3>
                                 <div className="space-y-2">
                                     {[
                                         { time: "14:32", msg: "Gerou copy", detail: "Template: Post Instagram" },
@@ -201,7 +201,7 @@ export default function AdminUserDetail() {
 
                         {activeTab === 3 && (
                             <div className="max-w-xl">
-                                <h3 className="text-[20px] font-serif text-foreground/90 mb-10 tracking-tight">Segurança da Conta</h3>
+                                <h3 className="text-[20px]  text-foreground/90 mb-10 tracking-tight">Segurança da Conta</h3>
                                 <div className="space-y-6">
                                     {[
                                         { label: "Autenticação em 2 Etapas", value: "Desativado", important: true },
@@ -224,7 +224,7 @@ export default function AdminUserDetail() {
 
                         {activeTab === 4 && (
                             <div className="max-w-2xl">
-                                <h3 className="text-[20px] font-serif text-foreground/90 mb-8 tracking-tight">Arquivo Interno (Audit)</h3>
+                                <h3 className="text-[20px]  text-foreground/90 mb-8 tracking-tight">Arquivo Interno (Audit)</h3>
                                 <div className="relative">
                                     <textarea
                                         rows={10}
@@ -263,7 +263,7 @@ export default function AdminUserDetail() {
                         value={credits}
                         onChange={(e) => setCredits(Number(e.target.value))}
                         className={cn(
-                            "h-14 w-full rounded-2xl border border-border/10 bg-muted/5 px-6 font-serif",
+                            "h-14 w-full rounded-2xl border border-border/10 bg-muted/5 px-6 ",
                             "text-2xl text-foreground outline-none focus:border-border/30 transition-all",
                         )}
                     />

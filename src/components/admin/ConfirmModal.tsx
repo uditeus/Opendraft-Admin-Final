@@ -46,7 +46,7 @@ export function ConfirmModal({
             {/* Modal */}
             <div className="relative z-10 w-full max-w-md rounded-[32px] border border-border/10 bg-background p-10 shadow-[0_32px_128px_-16px_rgba(0,0,0,0.3)] animate-in fade-in zoom-in-95 duration-200">
                 <div className="flex flex-col mb-8 text-center items-center">
-                    <h3 className="text-2xl font-serif font-normal text-foreground mb-4">{title}</h3>
+                    <h3 className="text-2xl  font-normal text-foreground mb-4">{title}</h3>
                     {description && (
                         <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
                     )}
@@ -67,7 +67,7 @@ export function ConfirmModal({
                             autoFocus
                             className={cn(
                                 "h-14 w-full border-b border-border/20 bg-transparent px-0 text-center",
-                                "text-xl font-serif text-foreground placeholder:text-muted-foreground/20 outline-none",
+                                "text-xl  text-foreground placeholder:text-muted-foreground/20 outline-none",
                                 "focus:border-foreground transition-all duration-300",
                             )}
                             placeholder={confirmText}

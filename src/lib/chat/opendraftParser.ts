@@ -39,13 +39,13 @@ export function parseOpendraftResponse(content: string): OpendraftResponse | nul
  */
 export function getDisplayContent(content: string): string {
     const parsed = parseOpendraftResponse(content);
-    if (parsed) return parsed.copy || parsed.debrief || parsed.thinking || content;
+    if (parsed) return parsed.copy || (parsed as any).content || parsed.debrief || parsed.thinking || content;
 
     // Streaming fallback: if it looks like structured JSON, try to extract fields
     const trimmed = content.trim();
     if (trimmed.startsWith('{')) {
         // Handle text content extraction
-        const contentMatch = content.match(/"(copy|thinking|debrief)":\s*"((?:[^"\\]|\\.)*)"/);
+        const contentMatch = content.match(/"(copy|content|thinking|debrief)":\s*"((?:[^"\\]|\\.)*)"/);
         if (contentMatch && contentMatch[2]) {
             let extracted = contentMatch[2];
             extracted = extracted.replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\\\/g, '\\');

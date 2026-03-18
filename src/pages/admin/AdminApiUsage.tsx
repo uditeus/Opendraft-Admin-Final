@@ -26,7 +26,7 @@ export default function AdminApiUsage() {
         <div className="flex flex-col w-full h-full pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 mt-8">
                 <div>
-                    <h1 className="text-[42px] font-serif font-normal text-foreground tracking-tight leading-tight">API Usage</h1>
+                    <h1 className="text-[42px]  font-normal text-foreground tracking-tight leading-tight">API Usage</h1>
                     <p className="text-[15px] text-muted-foreground mt-3 font-normal">Monitoramento em tempo real de tokens, latência e custos de inferência.</p>
                 </div>
             </div>
@@ -42,7 +42,7 @@ export default function AdminApiUsage() {
                     <div key={kpi.label} className="flex flex-col">
                         <span className="text-[11px] font-medium text-muted-foreground/40 uppercase tracking-widest mb-4">{kpi.label}</span>
                         <div className="flex items-baseline gap-3">
-                            <p className="text-[38px] font-normal text-foreground tracking-tight font-serif">{kpi.value}</p>
+                            <p className="text-[38px] font-normal text-foreground tracking-tight ">{kpi.value}</p>
                             <span className={cn("text-[12px] font-medium transition-colors",
                                 kpi.negative ? "text-amber-500" : "text-emerald-500"
                             )}>
@@ -56,7 +56,7 @@ export default function AdminApiUsage() {
             {/* Gráficos Principais - Enhanced */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-24">
                 <div className="w-full">
-                    <h3 className="text-[20px] font-serif text-foreground/90 mb-10 tracking-tight text-center lg:text-left">Consumo de Tokens (Diário)</h3>
+                    <h3 className="text-[20px]  text-foreground/90 mb-10 tracking-tight text-center lg:text-left">Consumo de Tokens (Diário)</h3>
                     <div className="h-[300px] w-full -ml-4">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={TOKEN_TREND}>
@@ -97,7 +97,7 @@ export default function AdminApiUsage() {
                 </div>
 
                 <div className="w-full">
-                    <h3 className="text-[20px] font-serif text-foreground/90 mb-10 tracking-tight text-center lg:text-left">Custo Operacional</h3>
+                    <h3 className="text-[20px]  text-foreground/90 mb-10 tracking-tight text-center lg:text-left">Custo Operacional</h3>
                     <div className="h-[300px] w-full -ml-4">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={COST_TREND}>
@@ -147,7 +147,7 @@ export default function AdminApiUsage() {
 
             {/* Listagem por Modelo - Clean Table */}
             <div className="w-full">
-                <h3 className="text-[22px] font-serif text-foreground/90 mb-10 tracking-tight">Consumo por Modelo</h3>
+                <h3 className="text-[22px]  text-foreground/90 mb-10 tracking-tight">Consumo por Modelo</h3>
                 <div className="overflow-x-auto -mx-2">
                     <table className="w-full border-separate border-spacing-0">
                         <thead>

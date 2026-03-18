@@ -37,7 +37,7 @@ export default function AdminDashboard() {
                 <motion.h1
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-14 text-center text-[40px] font-normal tracking-tight text-foreground font-serif"
+                    className="mb-14 text-center text-[40px] font-normal tracking-tight text-foreground "
                 >
                     {headline}
                 </motion.h1>

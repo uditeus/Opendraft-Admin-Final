@@ -64,7 +64,7 @@ export default function AdminSettings() {
         <div className="flex flex-col w-full h-full pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 mt-8">
                 <div>
-                    <h1 className="text-4xl font-serif font-normal text-foreground tracking-tight">Settings & Developer</h1>
+                    <h1 className="text-4xl  font-normal text-foreground tracking-tight">Settings & Developer</h1>
                     <p className="text-sm text-muted-foreground mt-2">Configurações de infraestrutura, prompts, modelos e flags.</p>
                 </div>
             </div>
@@ -105,7 +105,7 @@ export default function AdminSettings() {
 
             {/* Health Checks */}
             <div className="w-full mb-16">
-                <h3 className="text-xl font-serif text-foreground mb-8">Infraestrutura & Serviços Externos</h3>
+                <h3 className="text-xl  text-foreground mb-8">Infraestrutura & Serviços Externos</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
@@ -137,7 +137,7 @@ export default function AdminSettings() {
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 mb-16">
                 {/* Prompt Manager */}
                 <div className="flex flex-col">
-                    <h3 className="text-xl font-serif text-foreground mb-8">Prompt Manager</h3>
+                    <h3 className="text-xl  text-foreground mb-8">Prompt Manager</h3>
                     <div className="space-y-4">
                         {PROMPTS.map((p) => (
                             <div key={p.id} className="border-b border-border/20 pb-4 last:border-0 last:pb-0 hover:bg-muted/10 p-4 -mx-4 rounded-xl transition-colors">
@@ -177,7 +177,7 @@ export default function AdminSettings() {
                 <div className="flex flex-col gap-16">
                     {/* Feature Flags */}
                     <div className="w-full">
-                        <h3 className="text-xl font-serif text-foreground mb-8">Feature Flags</h3>
+                        <h3 className="text-xl  text-foreground mb-8">Feature Flags</h3>
                         <div className="divide-y divide-border/10">
                             {flags.map((f) => (
                                 <div key={f.id} className="flex items-center justify-between py-4 hover:bg-muted/10 px-2 -mx-2 rounded-xl transition-colors">
@@ -200,7 +200,7 @@ export default function AdminSettings() {
 
                     {/* Model Routing */}
                     <div className="w-full">
-                        <h3 className="text-xl font-serif text-foreground mb-8">Model Routing</h3>
+                        <h3 className="text-xl  text-foreground mb-8">Model Routing</h3>
                         <div className="space-y-6">
                             {MODELS.map((m) => (
                                 <div key={m.id}>
@@ -223,7 +223,7 @@ export default function AdminSettings() {
             {/* Rate Limits & Pricing tables */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
                 <div className="w-full">
-                    <h3 className="text-xl font-serif text-foreground mb-8">Rate Limits</h3>
+                    <h3 className="text-xl  text-foreground mb-8">Rate Limits</h3>
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
@@ -247,7 +247,7 @@ export default function AdminSettings() {
                 </div>
 
                 <div className="w-full">
-                    <h3 className="text-xl font-serif text-foreground mb-8">Preços por Token</h3>
+                    <h3 className="text-xl  text-foreground mb-8">Preços por Token</h3>
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>

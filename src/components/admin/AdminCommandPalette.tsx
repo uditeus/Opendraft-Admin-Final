@@ -125,7 +125,7 @@ export function AdminCommandPalette() {
                         onChange={(e) => { setQuery(e.target.value); setSelectedIndex(0); }}
                         onKeyDown={handleKeyDown}
                         placeholder="Search for anything..."
-                        className="flex-1 bg-transparent text-xl font-serif text-foreground placeholder:text-muted-foreground/30 outline-none"
+                        className="flex-1 bg-transparent text-xl  text-foreground placeholder:text-muted-foreground/30 outline-none"
                     />
                     <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/10 bg-muted/20 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
                         <span>ESC</span>
@@ -135,7 +135,7 @@ export function AdminCommandPalette() {
                 {/* Results */}
                 <div className="max-h-[480px] overflow-y-auto py-6 px-4 no-scrollbar">
                     {filtered.length === 0 && (
-                        <div className="px-8 py-12 text-center text-sm text-muted-foreground/50 font-serif italic">Nenhum resultado encontrado</div>
+                        <div className="px-8 py-12 text-center text-sm text-muted-foreground/50  italic">Nenhum resultado encontrado</div>
                     )}
 
                     {Object.entries(grouped).map(([type, items]) => (

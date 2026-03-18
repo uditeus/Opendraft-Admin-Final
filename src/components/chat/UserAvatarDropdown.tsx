@@ -4,6 +4,7 @@ import { AppIcon } from "@/components/icons/AppIcon";
 import { useTheme } from "next-themes";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useProfile } from "@/hooks/useProfile";
 
 import { useI18n } from "@/i18n/i18n";
 
@@ -59,9 +60,7 @@ export function UserAvatarDropdown({
 
   const avatarSrc = user?.user_metadata?.avatar_url || "";
 
-  // V1 Visual: Mock credits
-  const credits = 5;
-  const maxCredits = 10;
+  const { profile, credits, maxCredits, plan } = useProfile();
 
 
   const handleSignOut = async () => {
@@ -119,17 +118,21 @@ export function UserAvatarDropdown({
           {/* Turn Pro Banner */}
           {/* Turn Pro Banner */}
 
-          {/* Turn Pro Banner */}
-          <div className="mb-2 flex items-center justify-between rounded-xl bg-muted/50 p-3">
-            <span className="text-sm font-semibold pl-1">Seja Pro</span>
-            <Button
-              size="sm"
-              className="h-7 border-0 px-3 text-xs font-bold"
-              onClick={() => navigate("/upgrade")}
-            >
-              Assinar
-            </Button>
-          </div>
+          {/* Upgrade Banner */}
+          {plan !== 'ultra' && (
+            <div className="mb-2 flex items-center justify-between rounded-xl bg-muted/50 p-3">
+              <span className="text-sm font-semibold pl-1">
+                {plan === 'free' ? 'Seja Pro' : plan === 'pro' ? 'Upgrade para Max' : 'Seja Ultra'}
+              </span>
+              <Button
+                size="sm"
+                className="h-7 border-0 px-3 text-xs font-bold"
+                onClick={() => navigate("/upgrade")}
+              >
+                Assinar
+              </Button>
+            </div>
+          )}
 
           {/* Credits Section */}
           <div className="rounded-xl border border-border/60 bg-muted/30 p-3">
@@ -138,14 +141,16 @@ export function UserAvatarDropdown({
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Créditos</span>
                   <div className="flex items-center gap-1 cursor-pointer hover:text-primary transition-colors">
-                    <span className="text-xs text-muted-foreground">{credits} left</span>
+                    <span className="text-xs text-muted-foreground">
+                      {credits < 1 ? credits.toFixed(2) : credits.toFixed(1)} left
+                    </span>
                     <AppIcon name="ChevronRight" className="h-3 w-3 text-muted-foreground" />
                   </div>
                 </div>
-                <Progress value={(credits / maxCredits) * 100} className="h-2" />
+                <Progress value={maxCredits > 0 ? (credits / maxCredits) * 100 : 0} className="h-2" />
                 <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
                   <div className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
-                  Recarrega diariamente à meia-noite
+                  Recarrega mensalmente
                 </div>
               </div>
             ) : (

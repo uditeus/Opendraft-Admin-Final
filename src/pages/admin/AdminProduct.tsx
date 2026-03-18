@@ -37,7 +37,7 @@ export default function AdminProduct() {
         <div className="flex flex-col w-full h-full pb-20">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 mt-8">
                 <div>
-                    <h1 className="text-4xl font-serif font-normal text-foreground tracking-tight">Product Analytics</h1>
+                    <h1 className="text-4xl  font-normal text-foreground tracking-tight">Product Analytics</h1>
                     <p className="text-sm text-muted-foreground mt-2">Uso de features, engajamento e retenção granular.</p>
                 </div>
             </div>
@@ -62,7 +62,7 @@ export default function AdminProduct() {
                 ].map((kpi) => (
                     <div key={kpi.label} className="flex flex-col">
                         <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest mb-2">{kpi.label}</span>
-                        <p className="text-4xl font-normal text-foreground tracking-tight font-serif">{kpi.value}</p>
+                        <p className="text-4xl font-normal text-foreground tracking-tight ">{kpi.value}</p>
                         <span className="text-[11px] text-muted-foreground mt-2 font-medium uppercase tracking-tighter opacity-60">{kpi.desc}</span>
                     </div>
                 ))}
@@ -70,7 +70,7 @@ export default function AdminProduct() {
 
             {/* Feature usage table */}
             <div className="w-full mb-20">
-                <h3 className="text-xl font-serif text-foreground mb-8">Usage by Application Feature</h3>
+                <h3 className="text-xl  text-foreground mb-8">Usage by Application Feature</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
@@ -107,7 +107,7 @@ export default function AdminProduct() {
             {/* Session stats & Retention */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
                 <div>
-                    <h3 className="text-xl font-serif text-foreground mb-8">Retention by Monthly Cohort</h3>
+                    <h3 className="text-xl  text-foreground mb-8">Retention by Monthly Cohort</h3>
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
@@ -135,7 +135,7 @@ export default function AdminProduct() {
                     {SESSION_STATS.map((s) => (
                         <div key={s.label} className="flex flex-col">
                             <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">{s.label}</span>
-                            <p className="text-2xl font-normal text-foreground tracking-tight font-serif">{s.value}</p>
+                            <p className="text-2xl font-normal text-foreground tracking-tight ">{s.value}</p>
                         </div>
                     ))}
                 </div>

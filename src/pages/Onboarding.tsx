@@ -56,7 +56,14 @@ export default function Onboarding() {
         const checkUser = async () => {
             const supabase = getSupabase();
             const { data: { user } } = await supabase.auth.getUser();
+            const params = new URLSearchParams(window.location.search);
+            const isPreview = params.get("mode") === "preview";
+
             if (user) {
+                if (user.user_metadata?.onboarding_completed && !isPreview) {
+                    navigate("/new");
+                    return;
+                }
                 setUserEmail(user.email || null);
             } else {
                 navigate("/login");
@@ -250,10 +257,20 @@ export default function Onboarding() {
 
     return (
         <div className="min-h-screen bg-background flex flex-col items-center pt-8 pb-10 px-6 overflow-x-hidden overflow-y-auto font-['Inter']">
-            {/* Logo Section - Only on terms step */}
+            {/* Logo Section */}
             {step === "terms" && (
-                <div className="flex items-center gap-2 mb-12">
-                    <span className="text-[24px] font-semibold text-foreground tracking-tight font-['Inter']">Opendraft</span>
+                <div
+                    className="flex items-center gap-3 mb-12 cursor-pointer"
+                    onClick={() => navigate("/")}
+                >
+                    <img
+                        src="https://i.imgur.com/wlz2FUz.png"
+                        alt="Opendraft Logo"
+                        className="h-[24px] w-auto brightness-0 dark:invert"
+                    />
+                    <span className="text-[22px] font-semibold tracking-tighter text-black dark:text-white leading-none">
+                        Opendraft
+                    </span>
                 </div>
             )}
 
@@ -268,7 +285,7 @@ export default function Onboarding() {
                         className="flex-1 flex flex-col items-center justify-center w-full max-w-[450px]"
                     >
                         <div className="flex flex-col items-center gap-1.5 text-center mb-6">
-                            <h1 className="font-serif text-foreground text-[38px] leading-tight tracking-tight">
+                            <h1 className="text-foreground text-[38px] leading-tight tracking-tight">
                                 Vamos criar sua conta
                             </h1>
                             <p className="text-muted-foreground text-[16px]">
@@ -343,7 +360,7 @@ export default function Onboarding() {
                         className="flex-1 flex flex-col w-full max-w-[650px] pt-32"
                     >
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-2">
-                            <h2 className="font-serif text-foreground text-[32px] leading-tight mb-1 tracking-tight">
+                            <h2 className="text-foreground text-[32px] leading-tight mb-1 tracking-tight">
                                 <StreamingText text="Olá, eu sou o Opendraft." />
                             </h2>
                             <p className="text-muted-foreground text-[18px] leading-relaxed mb-1 font-light">
@@ -438,7 +455,7 @@ export default function Onboarding() {
                         className="flex-1 flex flex-col w-full max-w-[650px] pt-32"
                     >
                         <div className="w-full mb-8">
-                            <h2 className="text-foreground text-[32px] font-serif tracking-tight leading-tight">
+                            <h2 className="text-foreground text-[32px] tracking-tight leading-tight">
                                 <StreamingText text="Antes de começarmos, como devo chamá-lo?" />
                             </h2>
                         </div>
@@ -484,7 +501,7 @@ export default function Onboarding() {
                         className="flex-1 flex flex-col w-full max-w-[650px] pt-32"
                     >
                         <div className="w-full mb-8">
-                            <h2 className="text-foreground text-[32px] font-serif tracking-tight leading-tight mb-2">
+                            <h2 className="text-foreground text-[32px] tracking-tight leading-tight mb-2">
                                 <StreamingText text={`Legal, ${name}! Em qual destes perfis você mais se encaixa?`} />
                             </h2>
                         </div>

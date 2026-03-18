@@ -285,7 +285,7 @@ const Index = () => {
                 <div className="w-full px-6 lg:pl-[263px] lg:pr-[263px] h-[85px] flex items-center justify-between">
                     {/* Left: Logo only */}
                     <Link to="/" className="flex items-center cursor-pointer">
-                        <span className="text-[22px] md:text-[24px] font-serif font-medium tracking-tight text-zinc-900 dark:text-zinc-100">Opendraft</span>
+                        <span className="text-[22px] md:text-[24px]  font-medium tracking-tight text-zinc-900 dark:text-zinc-100">Opendraft</span>
                     </Link>
 
                     {/* Right: Links and Buttons */}
@@ -364,7 +364,7 @@ const Index = () => {
                 {/* Hero Section */}
                 <section className="w-screen px-6 lg:pl-[263px] lg:pr-[263px] min-h-[calc(100vh-72px)] pt-12 pb-32 md:pt-[2vh] md:pb-[14vh] flex flex-col md:flex-row items-center justify-between gap-16">
                     <div className="flex-1 max-w-xl text-left">
-                        <h1 className="text-[40px] md:text-[64px] font-serif font-medium leading-[1.05] tracking-[-0.02em] text-zinc-900 dark:text-white mb-6">
+                        <h1 className="text-[40px] md:text-[64px]  font-medium leading-[1.05] tracking-[-0.02em] text-zinc-900 dark:text-white mb-6">
                             Seu espaço para vibe-escrever melhor
                         </h1>
                         <p className="text-[16px] md:text-[18px] font-normal text-zinc-600 dark:text-zinc-400 leading-relaxed mb-10 max-w-md">
@@ -493,7 +493,7 @@ const Index = () => {
                                 alt="Mapa Icon"
                                 className="w-[150px] h-[150px] mx-auto mb-4 object-contain"
                             />
-                            <h2 className="text-[36px] md:text-[52px] font-serif font-medium text-zinc-900 dark:text-[#E8E6E3] leading-[1.1] tracking-tight">
+                            <h2 className="text-[36px] md:text-[52px]  font-medium text-zinc-900 dark:text-[#E8E6E3] leading-[1.1] tracking-tight">
                                 Escrever bem virou vantagem competitiva
                             </h2>
                         </div>
@@ -505,7 +505,7 @@ const Index = () => {
                                     <WritingAssistantMockup bgImage="https://i.imgur.com/LutTNRr.png" />
                                 </div>
                                 <div className="w-full md:w-1/2 flex flex-col gap-6 text-left">
-                                    <h3 className="text-[28px] md:text-[36px] font-serif font-medium text-zinc-900 dark:text-[#E8E6E3] tracking-tight">
+                                    <h3 className="text-[28px] md:text-[36px]  font-medium text-zinc-900 dark:text-[#E8E6E3] tracking-tight">
                                         A inteligência artificial que<br />escreve igual gente
                                     </h3>
                                     <p className="text-[16px] md:text-[17px] text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
@@ -517,7 +517,7 @@ const Index = () => {
                             {/* Feature 2: Text Left, Image Right */}
                             <div className="flex flex-col-reverse md:flex-row items-center gap-12 lg:gap-24">
                                 <div className="w-full md:w-1/2 flex flex-col gap-6 text-left">
-                                    <h3 className="text-[28px] md:text-[36px] font-serif font-medium text-zinc-900 dark:text-[#E8E6E3] tracking-tight">
+                                    <h3 className="text-[28px] md:text-[36px]  font-medium text-zinc-900 dark:text-[#E8E6E3] tracking-tight">
                                         Rascunho inteligente e editável
                                     </h3>
                                     <p className="text-[16px] md:text-[17px] text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
@@ -535,7 +535,7 @@ const Index = () => {
                                     <SmartDiscoveryMockup />
                                 </div>
                                 <div className="w-full md:w-1/2 flex flex-col gap-6 text-left">
-                                    <h3 className="text-[28px] md:text-[36px] font-serif font-medium text-zinc-900 dark:text-[#E8E6E3] tracking-tight">
+                                    <h3 className="text-[28px] md:text-[36px]  font-medium text-zinc-900 dark:text-[#E8E6E3] tracking-tight">
                                         Comece com a estrutura certa
                                     </h3>
                                     <p className="text-[16px] md:text-[17px] text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
@@ -557,7 +557,7 @@ const Index = () => {
                             className="w-[150px] h-[150px] mx-auto mb-4 object-contain"
                         />
 
-                        <h2 className="text-[36px] md:text-[52px] font-serif font-medium text-zinc-900 dark:text-[#E8E6E3] tracking-[-0.01em] mb-12 text-center">
+                        <h2 className="text-[36px] md:text-[52px]  font-medium text-zinc-900 dark:text-[#E8E6E3] tracking-[-0.01em] mb-12 text-center">
                             Como você pode usar a Opendraft
                         </h2>
 
@@ -635,13 +635,13 @@ const Index = () => {
                                             {/* Right Column: Large White Document */}
                                             <div className="flex-1 h-full bg-[#FCFBF9] rounded-t-[20px] shadow-2xl border-t border-l border-r border-black/10 overflow-hidden relative">
                                                 <div className="p-8 md:p-12 text-left absolute inset-0 overflow-hidden bg-gradient-to-b from-transparent to-white/50">
-                                                    <h3 className="text-[32px] md:text-[36px] lg:text-[40px] font-serif font-normal text-zinc-900 leading-[1.05] tracking-[-0.02em] mb-6">
+                                                    <h3 className="text-[32px] md:text-[36px] lg:text-[40px]  font-normal text-zinc-900 leading-[1.05] tracking-[-0.02em] mb-6">
                                                         Análise de estratégia de conteúdo:<br />
                                                         Padrões de desempenho e<br />
                                                         recomendações estratégicas
                                                     </h3>
-                                                    <h4 className="text-[22px] md:text-[24px] font-serif font-medium text-zinc-800 mb-4">Principais padrões de desempenho</h4>
-                                                    <h5 className="text-[18px] md:text-[20px] font-serif font-medium text-zinc-800 mb-4">Tipos de conteúdo com melhor desempenho</h5>
+                                                    <h4 className="text-[22px] md:text-[24px]  font-medium text-zinc-800 mb-4">Principais padrões de desempenho</h4>
+                                                    <h5 className="text-[18px] md:text-[20px]  font-medium text-zinc-800 mb-4">Tipos de conteúdo com melhor desempenho</h5>
                                                     <p className="text-[15px] md:text-[16px] font-medium text-zinc-800 mb-3">Estudos de caso dominam as conversões</p>
                                                     <ul className="list-disc pl-5 space-y-2 text-[14px] md:text-[15px] text-zinc-700 font-normal">
                                                         <li>Histórias de sucesso de clientes alcançam taxas de conversão de 15,4-16,8%</li>
@@ -659,7 +659,7 @@ const Index = () => {
                                     </div>
 
                                     <div className="w-full flex flex-col md:flex-row justify-between items-start mt-10 md:mt-12 gap-4 md:gap-8 px-2 md:px-0">
-                                        <h3 className="text-[28px] md:text-[32px] font-serif font-medium text-zinc-900 dark:text-[#E8E6E3] w-full md:w-[28%] tracking-tight">
+                                        <h3 className="text-[28px] md:text-[32px]  font-medium text-zinc-900 dark:text-[#E8E6E3] w-full md:w-[28%] tracking-tight">
                                             {activeTabContent?.title}
                                         </h3>
                                         <p className="text-[16px] text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal w-full md:w-[72%] lg:max-w-[850px]">
@@ -678,7 +678,7 @@ const Index = () => {
                     <div className="w-full px-6 lg:pl-[263px] lg:pr-[263px] grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                         {/* Left: Start Building */}
                         <div className="flex flex-col items-start text-left">
-                            <h2 className="text-[36px] md:text-[52px] font-serif font-medium text-zinc-900 dark:text-white leading-tight tracking-tight mb-10">
+                            <h2 className="text-[36px] md:text-[52px]  font-medium text-zinc-900 dark:text-white leading-tight tracking-tight mb-10">
                                 Comece a vibe-escrever
                             </h2>
                             <div className="flex flex-wrap gap-4">
@@ -706,7 +706,7 @@ const Index = () => {
                                         className="w-[110px] h-[110px] md:w-[150px] h-[150px] object-contain -ml-9 -mt-[7px]"
                                     />
                                     <div className="flex flex-col items-start gap-2 -mt-4 md:-mt-8 relative z-10 w-full">
-                                        <h3 className="text-[25px] font-serif font-medium text-zinc-900 dark:text-white tracking-tight leading-tight">
+                                        <h3 className="text-[25px]  font-medium text-zinc-900 dark:text-white tracking-tight leading-tight">
                                             Entre na lista de espera
                                         </h3>
                                         <p className="text-[17px] text-zinc-500 dark:text-zinc-400 leading-snug font-normal">
@@ -748,7 +748,7 @@ const Index = () => {
                         <div className="flex flex-col w-full lg:w-[320px] shrink-0">
                             {/* Logo */}
                             <Link to="/" className="flex items-center mb-[35px] cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                                <span className="text-[22px] md:text-[24px] font-serif font-medium tracking-tight text-zinc-100">Opendraft</span>
+                                <span className="text-[22px] md:text-[24px]  font-medium tracking-tight text-zinc-100">Opendraft</span>
                             </Link>
 
                             {/* Footer Composer */}
